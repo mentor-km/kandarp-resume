@@ -1,0 +1,2 @@
+# Cloudflare Pages. Static files are served first, then this rule.
+/*    /index.html   200
