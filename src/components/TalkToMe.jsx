@@ -21,7 +21,7 @@ export default function TalkToMe({
         type="button"
         className={`talk-btn ${voiceActive ? 'talk-btn--on' : ''} ${isListening ? 'talk-btn--listen' : ''} ${isSpeaking ? 'talk-btn--speak' : ''}`}
         onClick={toggleVoice}
-        aria-label="Talk to me — voice resume"
+        aria-label="Talk to me, voice resume"
         aria-expanded={voiceActive}
       >
         <span className="talk-btn-ring" />

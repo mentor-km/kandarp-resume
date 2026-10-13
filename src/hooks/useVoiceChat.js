@@ -199,7 +199,7 @@ export function useVoiceChat() {
         return;
       }
       if (event.error === 'aborted') return;
-      setError(event.error === 'no-speech' ? 'No speech detected—another listen turn will open shortly.' : 'Could not hear you clearly. Another listen turn will open shortly.');
+      setError(event.error === 'no-speech' ? 'No speech detected. Another listen turn will open shortly.' : 'Could not hear you clearly. Another listen turn will open shortly.');
     };
 
     rec.onend = () => {
@@ -265,7 +265,7 @@ export function useVoiceChat() {
 
     const lowerText = trimmed.toLowerCase();
     if (['call', 'phone', 'number', 'reach', 'contact', 'real kandarp'].some((k) => lowerText.includes(k))) {
-      const response = `Sure—here's how to reach me directly. Phone ${profile.phone}, email ${profile.email}, LinkedIn ${profile.linkedinHandle}. If you tell me you found me through this voice resume, I'll remember the context.`;
+      const response = `Email me at ${profile.email}, or find me on LinkedIn at ${profile.linkedinHandle}. I do not share a phone number from this site.`;
       setChatHistory((prev) => [...prev, { role: 'assistant', content: response }]);
       await speak(response);
       scheduleAfterSpeak();
@@ -304,7 +304,7 @@ export function useVoiceChat() {
           ? 'Could not reach Claude. Put ANTHROPIC_API_KEY in `.env` (see .env.example), then restart npm run dev.'
           : 'Could not reach Claude. Add ANTHROPIC_API_KEY in Vercel environment variables, then redeploy.'
       );
-      const fallbackResponse = "I'm having a little trouble reaching my AI backend right now. I'm a Product Owner at AltaDX building AI agents — want me to describe OMAP in plain words?";
+      const fallbackResponse = "I'm having a little trouble reaching my AI backend right now. I am a Product Owner at AltaDX. Ask me about OMAP in plain words.";
       setChatHistory((prev) => [...prev, { role: 'assistant', content: fallbackResponse }]);
       await speak(fallbackResponse);
       scheduleAfterSpeak();
@@ -345,7 +345,7 @@ export function useVoiceChat() {
       setVoiceActive(true);
       setChatHistory([]);
       setChatStage('greeting');
-      const greeting = "Hey—I'm Kandarp. What's your name?";
+      const greeting = "Hey, I'm Kandarp. What's your name?";
       setChatHistory([{ role: 'assistant', content: greeting }]);
       await speak(greeting);
       scheduleAfterSpeak();

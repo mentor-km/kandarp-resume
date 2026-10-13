@@ -8,7 +8,7 @@ import {
 } from '@react-pdf/renderer';
 import { resumeDownload as data } from '../content/resumeDownload';
 
-const gold = '#8a7340';
+const gold = '#0f4c4a';
 const dark = '#1a1a1a';
 const muted = '#555555';
 const lightRule = '#dddddd';
@@ -186,7 +186,7 @@ export default function ResumeDocument() {
 
   return (
     <Document
-      title={`${contact.name} — Resume`}
+      title={`${contact.name}, resume`}
       author={contact.name}
       subject="Professional Resume"
     >
@@ -200,8 +200,6 @@ export default function ResumeDocument() {
             <Link src={`mailto:${contact.email}`} style={styles.contactLink}>
               {contact.email}
             </Link>
-            <Text>·</Text>
-            <Text>{contact.phone}</Text>
             <Text>·</Text>
             <Link src={contact.linkedin} style={styles.contactLink}>
               {contact.linkedinHandle}
@@ -240,7 +238,7 @@ export default function ResumeDocument() {
         </View>
 
         <View style={styles.footer} fixed>
-          <Text>{contact.name} — Resume</Text>
+          <Text>{contact.name}, resume</Text>
           <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
         </View>
       </Page>
@@ -293,7 +291,7 @@ export default function ResumeDocument() {
         </View>
 
         <View style={styles.footer} fixed>
-          <Text>{contact.name} — Resume</Text>
+          <Text>{contact.name}, resume</Text>
           <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
         </View>
       </Page>

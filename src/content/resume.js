@@ -1,12 +1,13 @@
+import { contact, experience, profile as siteProfile } from './site';
+
 export const profile = {
-  name: 'Kandarp Mathur',
-  city: 'Ahmedabad, India',
-  headline: 'Product Owner · AI Platforms · Builder',
-  tagline: 'I build products that turn conversation and data into measurable outcomes.',
-  email: 'mathurkandarp@gmail.com',
-  phone: '+91 8109901136',
-  linkedin: 'https://linkedin.com/in/kandarpmathur14',
-  linkedinHandle: 'linkedin.com/in/kandarpmathur14',
+  name: siteProfile.name,
+  city: siteProfile.location,
+  headline: siteProfile.role,
+  tagline: siteProfile.valueProposition,
+  email: contact.email,
+  linkedin: contact.linkedin,
+  linkedinHandle: contact.linkedinLabel,
 };
 
 export const chapters = [
@@ -19,13 +20,13 @@ export const chapters = [
       { type: 'lead', text: profile.tagline },
       {
         type: 'paragraph',
-        text: 'I am a Product Owner and builder based in Ahmedabad. I lead teams shipping AI products for fitness, edtech, and wellness — and I still write code when the product demands it.',
+        text: 'I am a product owner and AI product builder in Ahmedabad. I connect discovery, agent behaviour, prototypes, and delivery.',
       },
       {
         type: 'meta',
         items: [
           { label: 'Location', value: profile.city },
-          { label: 'Focus', value: 'AI agents · Product · Agile delivery' },
+          { label: 'Focus', value: 'Agentic AI, product strategy, and delivery' },
         ],
       },
     ],
@@ -34,79 +35,46 @@ export const chapters = [
     id: 'arc',
     number: '02',
     title: 'The Arc',
-    subtitle: 'Career journey',
+    subtitle: 'Employment',
     blocks: [
       {
         type: 'paragraph',
-        text: 'My path wasn’t linear — it was a steady climb from engineering foundations into data, business analysis, and product ownership at scale.',
+        text: 'The path runs from training, to reporting, to business analysis, and then to product ownership. Founder work sits outside this employment list.',
       },
       {
         type: 'timeline',
-        items: [
-          {
-            period: '2025 — Present',
-            role: 'Product Owner · OMAP',
-            org: 'AltaDX (formerly DX Factor Solutions Pvt Ltd)',
-            detail:
-              'Leading product for an AI agent platform — backlog, discovery, delivery, and agile ceremonies for a 25-person team.',
-          },
-          {
-            period: '2019 — 2025',
-            role: 'Business Analyst',
-            org: 'KTek Resourcing',
-            detail:
-              'Requirements, solution design, API integrations, and reporting. Improved onboarding efficiency by 30% through workflow redesign and automation.',
-          },
-          {
-            period: '2014 — 2018',
-            role: 'Reporting Analyst',
-            org: 'Wealth It Global',
-            detail:
-              'Built pipelines and dashboards in Excel, Power BI, and SQL. Cut manual reporting by 40% through automation.',
-          },
-          {
-            period: '2013',
-            role: 'Trainer',
-            org: 'Qpid Outsourcing',
-            detail: 'Learning programs, SOPs, and cross-functional workshops.',
-          },
-          {
-            period: '2009 — 2013',
-            role: 'B.E. Mechanical Engineering',
-            org: 'Rajiv Gandhi Prodyogiki Vishwavidyalaya',
-            detail: 'Analytical foundation that later shaped my data-driven product thinking.',
-          },
-        ],
+        items: experience.map((job) => ({
+          period: job.dates,
+          role: job.title,
+          org: job.org,
+          detail: job.summary,
+        })),
       },
     ],
   },
   {
     id: 'altadx',
     number: '03',
-    title: 'AltaDX · OMAP',
-    subtitle: 'Where I work today',
+    title: 'AltaDX, OMAP',
+    subtitle: 'Professional work',
     blocks: [
       {
         type: 'paragraph',
-        text: 'At AltaDX — formerly DX Factor Solutions Pvt Ltd — I manage a team of 25 people building OMAP: a platform that lets enterprises create AI agents and deploy them inside existing workflows.',
-      },
-      {
-        type: 'paragraph',
-        text: 'OMAP serves fitness, edtech, and wellness operators who need agents for acquisition, retention, and operations — without ripping out the systems they already run.',
+        text: 'Since June 2025 I have been Product Owner and Project Manager for OMAP, an agentic AI platform for fitness and wellness operators.',
       },
       {
         type: 'list',
-        title: 'What I own day to day',
+        title: 'What I own',
         items: [
-          'Product backlog, research, and feature design',
-          'End-to-end product flows and story writing with the team',
-          'Sprint planning, daily scrums, grooming, and reviews',
-          'The intersection of Product Owner, Scrum Master, and project delivery',
+          'Competitor research, client feedback, and capability prioritisation',
+          'Agent behaviour, configuration flows, PRDs, and clickable HTML prototypes',
+          'Stories and acceptance criteria with business analysts, in Jira Product Discovery',
+          'Backlog, capacity, and sprint coordination across four pods',
         ],
       },
       {
         type: 'highlight',
-        text: '100+ fitness operators on the platform — outcomes over output, every sprint.',
+        text: 'Platform-wide commercial figures are not published. A reporting correction improved accuracy. It did not shrink real scope from 64.5% to 7.5%.',
       },
     ],
   },
@@ -114,33 +82,24 @@ export const chapters = [
     id: 'round1',
     number: '04',
     title: 'Round1',
-    subtitle: 'Founder · Builder · One-man team',
+    subtitle: 'Founder, not employment',
     blocks: [
       {
         type: 'paragraph',
-        text: 'Round1 is AI-powered first-round interview screening — built for how hiring actually works. I am the founder, developer, and product owner. I designed and shipped every layer of it.',
+        text: 'Round1 is a founder product for voice-based first-round screening. Building started in November 2025. The first client was onboarded on 2 July 2026.',
       },
       {
         type: 'quote',
-        text: 'Stop trusting resumes. Know who to hire before Round 2.',
+        text: 'A client completed 153 interviews through Round1 over three months, as reported in October 2026.',
       },
       {
         type: 'list',
-        title: 'What it does',
+        title: 'Product rules',
         items: [
-          'Browser-based voice interviews — candidates join via link, no human needed for round one',
-          'Adaptive AI questions from job description and experience level',
-          'Instant assessment reports: scores, strengths, risks, integrity signals, full transcript, PDF to recruiter inbox',
-          'Quick Apply self-schedule portal — share a link, candidates pick their slot',
-          'Inbound email agent — forward a candidate email, interview auto-created',
-          'Multi-role orgs: owner, admin, team leads, recruiters — analytics, quotas, executive reports',
-        ],
-      },
-      {
-        type: 'list',
-        title: 'Stack I built',
-        items: [
-          'Next.js · TypeScript · Supabase · OpenAI · Inngest · Postmark · Vercel',
+          'Questions follow the job description',
+          'Technical weighting 80, communication 20, stated explicitly',
+          'A minimum-answer gate sits in front of a full recommendation',
+          'Integrity cues are signals, not proof of dishonesty',
         ],
       },
     ],
@@ -149,21 +108,11 @@ export const chapters = [
     id: 'abc',
     number: '05',
     title: 'Analystbychance',
-    subtitle: 'Edtech · Mentorship',
+    subtitle: 'Founder initiative',
     blocks: [
       {
         type: 'paragraph',
-        text: 'Analystbychance is an edtech mentorship platform I run — helping people from any background transition into Business Analyst, Product Owner, and Data Analyst roles through one-on-one mentorship.',
-      },
-      {
-        type: 'list',
-        title: 'What we offer',
-        items: [
-          'Practical roadmaps — not theory decks',
-          '1:1 mentorship tailored to where you are today',
-          'Community and feedback loops for aspiring analysts and POs',
-          '1000+ mentees helped break into tech roles',
-        ],
+        text: 'Analystbychance is mentorship for recruiters, HR professionals, and staffing professionals moving into Business Analyst, Scrum Master, and Product Owner roles while staying employed. It is separate from the AI product case studies.',
       },
     ],
   },
@@ -171,26 +120,16 @@ export const chapters = [
     id: 'craft',
     number: '06',
     title: 'How I Work',
-    subtitle: 'Philosophy',
+    subtitle: 'Approach',
     blocks: [
       {
         type: 'paragraph',
-        text: 'I sit where product strategy meets execution. Discovery before delivery. Stories that engineers can ship. Ceremonies that protect focus instead of filling calendars.',
-      },
-      {
-        type: 'list',
-        title: 'Principles',
-        items: [
-          'Outcomes over output — every feature ties to a metric',
-          'Research and design before backlog commitments',
-          'Agile in practice: scrums, grooming, reviews I actually run',
-          'Data-informed decisions: Power BI, SQL, APIs, integrations',
-        ],
+        text: 'Discover, frame, define, prototype and validate, then deliver and learn. AI behaviour needs a failure state, and a simpler workflow can beat another feature.',
       },
       {
         type: 'chips',
         title: 'Certifications',
-        items: ['CSM®', 'SAFe® 6 POPM', 'Salesforce AI Associate', 'Registered Scrum Basics™'],
+        items: ['CSM', 'SAFe 6 POPM', 'Salesforce AI Associate', 'Registered Scrum Basics'],
       },
     ],
   },
@@ -198,24 +137,15 @@ export const chapters = [
     id: 'proof',
     number: '07',
     title: 'Proof',
-    subtitle: 'Impact',
+    subtitle: 'Approved figures only',
     blocks: [
       {
         type: 'stats',
         items: [
-          { value: '25', label: 'People led at AltaDX' },
-          { value: '100+', label: 'Fitness operators on OMAP' },
-          { value: '1000+', label: 'Mentees via Analystbychance' },
-          { value: 'Solo', label: 'Round1 — founder to production' },
-        ],
-      },
-      {
-        type: 'list',
-        title: 'Selected outcomes',
-        items: [
-          '30% onboarding efficiency gain at KTek through workflow redesign',
-          '40% reduction in manual reporting at Wealth It Global',
-          'Full SaaS for Round1: trial, billing, multi-tenant orgs, integrity tracking',
+          { value: '4', label: 'Delivery pods coordinated at AltaDX' },
+          { value: '153', label: 'Interviews a Round1 client completed' },
+          { value: '30%', label: 'Onboarding efficiency at KTek' },
+          { value: '40%', label: 'Less manual reporting at Wealth IT Global' },
         ],
       },
     ],
@@ -224,55 +154,37 @@ export const chapters = [
     id: 'contact',
     number: '08',
     title: 'Contact',
-    subtitle: 'Let\'s connect',
+    subtitle: 'Email and LinkedIn',
     blocks: [
       {
         type: 'paragraph',
-        text: 'Scroll the story — or tap Talk to me and ask anything directly. I speak in first person and know everything on this resume.',
+        text: 'Email and LinkedIn are the contact paths.',
       },
       {
         type: 'links',
         items: [
           { label: 'Email', href: `mailto:${profile.email}`, value: profile.email },
           { label: 'LinkedIn', href: profile.linkedin, value: profile.linkedinHandle },
-          { label: 'Phone', href: `tel:${profile.phone.replace(/\s/g, '')}`, value: profile.phone },
         ],
       },
     ],
   },
 ];
 
-export const voiceSystemPrompt = `You ARE Kandarp Mathur on a live voice call about your own career. Speak ONLY in the first person: always "I", "me", "my", "I've"—never describe yourself as "Kandarp" in third person, never "he" or "him" for yourself. You are not an assistant talking about someone else; you are Kandarp talking to a visitor.
+export const voiceSystemPrompt = `You ARE Kandarp Mathur on a live voice call about your own career. Speak ONLY in the first person: always "I", "me", "my". Never describe yourself as "Kandarp" in the third person. Keep answers to two or three sentences.
 
-Keep answers short for voice: about two or three sentences. Sound warm, confident, and human.
+Positioning: ${profile.headline}. ${profile.tagline} Location: ${profile.city}.
 
-Identity:
-- Product Owner in ${profile.city}.
-- Headline: ${profile.headline}
+AltaDX, June 2025 to present: Product Owner and Project Manager for OMAP, an agentic AI platform for fitness and wellness operators. I define agent behaviour, configuration flows, PRDs, and clickable prototypes. I coordinate four delivery pods. Do not mention team headcount, customer counts, revenue, conversations, hours saved, or a count of agent types.
 
-AltaDX (formerly DX Factor Solutions Pvt Ltd):
-- I manage a team of 25 people.
-- I own OMAP — a platform to create AI agents and deploy them in existing workflows for fitness, edtech, and wellness.
-- I manage backlog, research, feature design, flows, stories, sprint planning, daily scrums, grooming, reviews — PO + Scrum Master + PM in one role.
-- OMAP serves 100+ fitness operators.
+Round1 is founder work, not employment. Building started November 2025. First client onboarded 2 July 2026. A client completed 153 interviews through the product over three months, reported October 2026. I did not conduct those interviews. Do not claim hire quality, less bias, time saved, or revenue. Integrity signals are signals, not proof of dishonesty. Scoring uses an 80/20 technical-to-communication weight and a minimum-answer gate.
 
-Round1 (I built it — founder, developer, one-man team):
-- AI first-round interview screening: browser voice interviews, adaptive questions from JD, instant PDF assessment reports.
-- Quick Apply self-schedule, inbound email agent, integrity tracking, multi-role orgs, analytics.
-- Stack: Next.js, Supabase, OpenAI, Inngest, Postmark, Vercel.
+Chirppy is a demo-ready weekend project for real-estate developers. Answers stay inside uploaded documents. It is not described as self-serve-ready.
+Ask Mandy is an in-progress weekend mock interview that scores only answered questions. Do not quote a price.
+Nivesh Pustika is a free trading journal for closed trades. No broker sync and no investment advice.
+Analystbychance is a founder mentoring initiative, secondary to the AI product work. Do not cite a mentee count.
 
-Analystbychance (I run it):
-- Edtech mentorship — any background to BA, PO, or DA roles via 1:1 mentorship.
-- 1000+ mentees helped.
+Earlier roles: KTek Resourcing, January 2019 to March 2025, Business Analyst, 30% onboarding efficiency improvement. Wealth IT Global, January 2014 to December 2018, Reporting Analyst, 40% less manual reporting effort. Qpid Outsourcing, June 2013 to December 2013, Trainer.
+Education: B.E. Mechanical Engineering, RGPV, 2009 to 2013. BITSoM-Masai product management programme is in progress as of October 2026, not completed.
 
-Career:
-- AltaDX 2025–present: Product Owner.
-- KTek Resourcing 2019–2025: Business Analyst.
-- Wealth It Global 2014–2018: Reporting Analyst.
-- Qpid Outsourcing 2013: Trainer.
-- B.E. Mechanical Engineering, RGPV 2009–2013.
-
-Skills: Product Management, AI Agents, Agile/Scrum/SAFe, Power BI, SQL, APIs, JIRA, Confluence.
-Certs: CSM®, SAFe® 6 POPM, Salesforce AI Associate.
-
-Contact: ${profile.phone}, ${profile.email}, ${profile.linkedinHandle}.`;
+Contact: ${profile.email}, ${profile.linkedinHandle}. Do not give a phone number.`;

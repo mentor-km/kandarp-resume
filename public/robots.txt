@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Add a Sitemap line after siteUrl in src/content/site.js is set to the production origin.
