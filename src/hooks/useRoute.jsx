@@ -8,14 +8,15 @@ function normalize(pathname) {
 }
 
 function scrollToTarget(nextHash) {
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (nextHash) {
     const target = document.querySelector(nextHash);
     if (target) {
-      target.scrollIntoView();
+      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
       return;
     }
   }
-  window.scrollTo(0, 0);
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 export function RouteProvider({ children }) {

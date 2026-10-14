@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import './styles/global.css'
 import App from './App.jsx'
 
+document.documentElement.classList.add('js')
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />

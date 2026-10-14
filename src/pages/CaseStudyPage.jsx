@@ -18,9 +18,9 @@ export default function CaseStudyPage({ slug }) {
         <main id="main" className="not-found">
           <p className="eyebrow">Missing page</p>
           <h1>This case study is not published.</h1>
-          <p>The link may be out of date. The published studies are linked from selected work.</p>
-          <AppLink className="button" to="/#work">
-            Back to selected work
+          <p>The link may be out of date. My published studies are linked from the home page.</p>
+          <AppLink className="button" to="/">
+            Back home
           </AppLink>
         </main>
         <SiteFooter />

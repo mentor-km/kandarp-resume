@@ -24,11 +24,11 @@ export const pageMeta = {
 };
 
 export const navigation = [
-  { id: 'work', label: 'Selected work', href: '/#work' },
-  { id: 'projects', label: 'Projects', href: '/#projects' },
-  { id: 'approach', label: 'Approach', href: '/#approach' },
+  { id: 'altadx', label: 'AltaDX', href: '/#altadx' },
+  { id: 'founder', label: 'Founder', href: '/#founder' },
+  { id: 'projects', label: 'Products', href: '/#projects' },
   { id: 'experience', label: 'Experience', href: '/#experience' },
-  { id: 'about', label: 'About', href: '/#about' },
+  { id: 'skills', label: 'Skills', href: '/#skills' },
   { id: 'contact', label: 'Contact', href: '/#contact' },
 ];
 
@@ -40,15 +40,10 @@ export const contact = {
   location: 'Ahmedabad, India',
 };
 
-/**
- * Static resume file. Drop the PDF at public/Kandarp_Mathur_Resume.pdf
- * when a designed file should replace the generated download.
- * Until that file exists, the site prepares Kandarp_Mathur_Resume.pdf in the browser.
- */
+/** Static resume file served from public/. Replace the PDF there to update the download. */
 export const resumeAsset = {
   filename: 'Kandarp_Mathur_Resume.pdf',
   publicPath: '/Kandarp_Mathur_Resume.pdf',
-  placeholder: 'public/Kandarp_Mathur_Resume.pdf',
 };
 
 export const metrics = [
@@ -65,7 +60,7 @@ export const metrics = [
     id: 'round1-interviews',
     value: '153',
     label: 'Interviews a client completed',
-    scope: 'Round1 product usage over three months. Kandarp did not conduct these interviews.',
+    scope: 'Round1 product usage over three months. I did not conduct these interviews.',
     asOf: 'Reported October 2026',
     publiclyApproved: true,
     sourceNote: 'One client. Not a revenue or customer-count claim.',
@@ -164,7 +159,8 @@ export const experience = [
     title: 'Reporting Analyst',
     dates: 'January 2014 to December 2018',
     location: 'India',
-    summary: 'Reporting and analytics for leadership and operations.',
+    summary:
+      'Reporting and analytics for leadership and operations, built in Excel, Power BI, and SQL.',
     points: [
       'Reduced manual reporting effort by 40% through automation, scheduled refreshes, and standardised KPI definitions in Excel, Power BI, and SQL.',
     ],
@@ -175,7 +171,8 @@ export const experience = [
     title: 'Trainer',
     dates: 'June 2013 to December 2013',
     location: 'India',
-    summary: 'Learning programmes and operating consistency.',
+    summary:
+      'Learning programmes, SOPs, and workshops so teams could work from the same process.',
     points: [
       'Designed and delivered learning programmes, SOPs, and cross-functional workshops.',
     ],
@@ -186,8 +183,40 @@ export const about = {
   lead:
     'I am a product owner and AI product builder. I turn complex workflows into products people can use.',
   paragraphs: [
-    'The work combines discovery, requirements, AI behaviour, evaluation guardrails, prototyping, prioritisation, and delivery. At AltaDX I help lead product definition and delivery for OMAP. Outside that role I build independent products so the decisions stay concrete.',
-    'The career path runs from training, to reporting and analytics, to recruitment systems and business analysis, and then to product ownership and AI product building. That path is an evolution toward product leadership: users, workflows, data, requirements, and delivery in one line of work.',
+    'My work combines discovery, requirements, AI behaviour, evaluation guardrails, prototyping, prioritisation, and delivery. At AltaDX I help lead product definition and delivery for OMAP. Outside that role I build my own products so the decisions stay concrete.',
+    'I started in training, moved to reporting and analytics, then to recruitment systems and business analysis, and then to product ownership and AI product building. Users, workflows, data, requirements, and delivery have been one line of work for me.',
+  ],
+};
+
+export const altadxBeats = [
+  {
+    step: '01',
+    title: 'Discover',
+    text: 'I research competitors and client feedback, then decide which capabilities we build, improve, or remove.',
+  },
+  {
+    step: '02',
+    title: 'Define',
+    text: 'I specify agent behaviour, user journeys, setup flows, and business rules, and I write the PRDs and clickable HTML prototypes for operators who are not expected to be technical.',
+  },
+  {
+    step: '03',
+    title: 'Deliver',
+    text: 'I turn that definition into backlog, capacity, sprint planning, ceremonies, risks, and stakeholder updates across four pods, and I keep reporting honest by separating QA Hold and QA-found defects from new scope.',
+  },
+];
+
+export const tryfunzo = {
+  name: 'Tryfunzo',
+  status: 'Pre-launch',
+  role: 'Independent product concept',
+  site: 'tryfunzo.com',
+  siteLive: false,
+  summary:
+    'My QR-based multiplayer table-games web app for Indian restaurants. Everyone at a table scans one code and plays the same game in the browser.',
+  points: [
+    'I am designing it for the table, so the game has to work for a group on mixed phones without an install.',
+    'It is pre-launch. The site is not live yet, and I have no usage figure to share.',
   ],
 };
 
@@ -199,8 +228,8 @@ export const founderInitiative = {
   verified: true,
   verifiedAsOf: '12 October 2026',
   summary:
-    'One-to-one mentorship for recruiters, HR professionals, and staffing professionals who want to move into Business Analyst, Scrum Master, and Product Owner roles while staying employed. The sequence runs about three to five months, with three live sessions a week, mock interviews, and placement support.',
-  note: 'This is founder and mentoring work. It is separate from full-time employment and from the AI product case studies.',
+    'I mentor recruiters, HR professionals, and staffing professionals one-to-one as they move into Business Analyst, Scrum Master, and Product Owner roles while staying employed. The sequence runs about three to five months, with three live sessions a week, mock interviews, and placement support.',
+  note: 'I keep this separate from my full-time role and from the AI product case studies.',
 };
 
 export const skillGroups = [
@@ -303,14 +332,14 @@ export const education = [
     title: 'Product Management with Gen and Agentic AI',
     org: 'BITSoM-Masai',
     dates: 'In progress as of October 2026',
-    note: 'Currently pursuing. This programme is not completed.',
+    note: 'I am currently pursuing this. It is not completed.',
   },
   {
     id: 'rgpv',
     title: 'Bachelor of Engineering, Mechanical Engineering',
     org: 'Rajiv Gandhi Prodyogiki Vishwavidyalaya (RGPV)',
     dates: '2009 to 2013',
-    note: 'Engineering training that later supported analytical product work.',
+    note: 'The engineering training I still lean on for analytical product work.',
   },
 ];
 

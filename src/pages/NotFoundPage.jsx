@@ -13,7 +13,7 @@ export default function NotFoundPage() {
       <main id="main" className="not-found">
         <p className="eyebrow">Missing page</p>
         <h1>This page is not on the site.</h1>
-        <p>Use the work section to open a case study, or return home.</p>
+        <p>Head back to the home page to find my work.</p>
         <AppLink className="button" to="/">
           Back home
         </AppLink>

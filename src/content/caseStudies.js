@@ -1,6 +1,7 @@
 /**
- * Case studies and project cards. October 2026 knowledge base.
- * Status labels follow that source. Do not add unapproved metrics here.
+ * Case studies and project cards, written in my own voice.
+ * Status labels and figures are the ones I have approved for public use.
+ * Links are listed only after the site was checked.
  */
 
 export const caseStudies = [
@@ -19,12 +20,13 @@ export const caseStudies = [
     year: '2025 to present',
     dates: 'June 2025 to present',
     featured: true,
+    site: 'omapagents.ai',
     summary:
-      'Product definition and delivery for an agentic AI platform that lets fitness and wellness businesses configure digital agents inside operational workflows.',
+      'I define and deliver OMAP, an agentic AI platform that lets fitness and wellness businesses configure digital agents inside their operational workflows.',
     audience:
-      'Non-technical operators at fitness and wellness businesses, plus the internal pods who design, build, and release agent capabilities.',
+      'I build for non-technical operators at fitness and wellness businesses, and for the internal pods who design, build, and release agent capabilities.',
     context:
-      'OMAP is an enterprise platform at AltaDX. Businesses use it to configure digital agents for operational work rather than replacing the systems they already run. My role started in June 2025 and is current.',
+      'OMAP is an enterprise platform at AltaDX. Businesses use it to configure digital agents for operational work rather than replacing the systems they already run. I joined in June 2025 and the role is current.',
     problem:
       'Agent concepts stall when setup is duplicated, behaviour is unbounded, or a release commits to tickets and features that are no longer real. Sprint reports can also mix QA states into new scope and make delivery look worse, or better, than it is.',
     ownership: [
@@ -35,7 +37,7 @@ export const caseStudies = [
       'Stakeholder reporting, product metrics, and release communication.',
     ],
     boundaries:
-      'I own product definition and delivery coordination. Business analysts turn PRDs into roadmap items, stories, and acceptance criteria with me. Design and engineering implement the product. I do not treat platform-wide commercial results as a personal outcome, and those figures are not published here.',
+      'I own product definition and delivery coordination. Business analysts turn PRDs into roadmap items, stories, and acceptance criteria with me. Design and engineering implement the product. I do not treat platform-wide commercial results as a personal outcome, and I do not publish those figures.',
     constraints: [
       'Operators configuring agents are not expected to be technical.',
       'Delivery runs across four pods, so capacity and dependencies shape what can be committed.',
@@ -77,7 +79,7 @@ export const caseStudies = [
         tradeoff:
           'Validation slows the commitment. It also stops the team from planning work that the product can no longer do.',
         evidence:
-          'The check found ticket references that did not exist and a routing feature that had already been deleted. No ticket IDs are published here.',
+          'The check found ticket references that did not exist and a routing feature that had already been deleted. I do not publish ticket IDs.',
       },
       {
         problem: 'Sprint reports mixed QA Hold and defects found in QA into the picture of new scope.',
@@ -142,7 +144,14 @@ export const caseStudies = [
       'Validate whether the dues-page split reduces setup errors. That has not been measured here.',
       'Learn whether operators act on advisory outreach or ignore it. Usage of that advice is not claimed.',
     ],
-    links: [],
+    links: [
+      {
+        label: 'omapagents.ai',
+        href: 'https://omapagents.ai',
+        verified: true,
+        verifiedAsOf: '14 October 2026',
+      },
+    ],
     media: {
       title: 'Setup and outreach rules',
       caption: 'Illustrative interface. Not a production screenshot.',
@@ -169,10 +178,11 @@ export const caseStudies = [
     year: '2025 to present',
     dates: 'Building from November 2025. First client onboarded 2 July 2026.',
     featured: true,
+    site: 'round1.in',
     summary:
-      'AI voice screening for a first-round interview. The flow follows the job description, and the report is bounded by scoring rules rather than an open-ended judgement.',
+      'I built Round1 for AI voice screening in a first-round interview. The flow follows the job description, and the report is bounded by scoring rules rather than an open-ended judgement.',
     audience:
-      'Recruiters and hiring teams who need a consistent first screen, and candidates who join a voice interview from a browser.',
+      'I built it for recruiters and hiring teams who need a consistent first screen, and for candidates who join a voice interview from a browser.',
     context:
       'Round1 is a founder product, not a full-time employment role. I started building it in November 2025. The first client was onboarded on 2 July 2026. The public site is round1.in.',
     problem:
@@ -323,12 +333,13 @@ export const caseStudies = [
     year: 'Weekend project',
     dates: 'Independent project. Public site checked 12 October 2026.',
     featured: false,
+    site: 'getchirppy.com',
     summary:
-      'An AI lead assistant for Indian real-estate developers. It answers from brochures and price lists, qualifies interest, estimates EMI, and supports site-visit booking.',
+      'I built Chirppy as an AI lead assistant for Indian real-estate developers. It answers from brochures and price lists, qualifies interest, estimates EMI, and supports site-visit booking.',
     audience:
-      'Indian developers responding to buyers, and buyers asking about a specific project in English, Hindi, or Hinglish.',
+      'I built it for Indian developers responding to buyers, and for buyers asking about a specific project in English, Hindi, or Hinglish.',
     context:
-      'Chirppy is an independent weekend product, not employment and not a founder company on the experience timeline. The knowledge base describes a demo-ready MVP. It is not described as self-serve-ready. The public site is getchirppy.com.',
+      'Chirppy is a weekend product I built on my own. It is not employment and not one of my founder companies. It is a demo-ready MVP, and I do not call it self-serve-ready. The public site is getchirppy.com.',
     problem:
       'Buyers ask the same brochure questions, and a general model will invent a price or a RERA claim when the document does not contain one. A second failure is quieter: one developer’s content answering inside another developer’s project.',
     ownership: [
@@ -336,7 +347,7 @@ export const caseStudies = [
       'The product decision to treat tenant isolation, found in review, as a requirement rather than a later hardening task.',
     ],
     boundaries:
-      'I am not publishing customer names, adoption, or revenue. Demo-ready does not mean a developer can onboard alone. Pricing on the public site is not repeated here, because this portfolio follows the knowledge base rather than a live price list that can change.',
+      'I am not publishing customer names, adoption, or revenue. Demo-ready does not mean a developer can onboard alone. I do not repeat the pricing from the public site here, because a live price list can change.',
     constraints: [
       'Answers have to come from the developer’s own brochures and price lists.',
       'Conversations may be in Hinglish as well as English or Hindi.',
@@ -413,7 +424,7 @@ export const caseStudies = [
     outcomes: [
       {
         kind: 'Status',
-        text: 'Demo-ready MVP as of the October 2026 knowledge base. Not described as self-serve-ready.',
+        text: 'Demo-ready MVP as of October 2026. I do not describe it as self-serve-ready.',
       },
       {
         kind: 'Qualitative',
@@ -461,14 +472,15 @@ export const caseStudies = [
     status: 'in-progress',
     statusLabel: 'In progress',
     year: 'Weekend project',
-    dates: 'Independent project. No public URL is listed for this portfolio.',
+    dates: 'Independent project. Public site checked 14 October 2026.',
     featured: false,
+    site: 'askmandy.us',
     summary:
-      'A voice mock interview for job-seekers. Booking is by role. Feedback is scored only on questions the candidate actually answered.',
+      'I built Ask Mandy as a voice mock interview for job-seekers. Booking is by role, and feedback is scored only on the questions the candidate actually answered.',
     audience:
-      'Job-seekers practising a role-specific interview, without creating an account first.',
+      'I built it for job-seekers practising a role-specific interview, without creating an account first.',
     context:
-      'Ask Mandy is an independent weekend project. It is not employment and not Round1. Round1 is a recruiter product. Ask Mandy is practice for the candidate. No public website is approved for this page, and no price is shown because the current price is not confirmed.',
+      'Ask Mandy is a weekend project I built on my own. It is not employment and it is not Round1. Round1 is my recruiter product. Ask Mandy is practice for the candidate. The public site is askmandy.us. I do not show a price because the current price is not confirmed.',
     problem:
       'Mock-interview scores often punish silence. A candidate who exits early, or who is not asked the whole set, can look weaker because unanswered questions were treated as failed ones.',
     ownership: [
@@ -498,7 +510,7 @@ export const caseStudies = [
         tradeoff:
           'Two candidates who answered different amounts are not on one complete scale. The report is honest about its coverage and weaker as a ranking tool.',
         evidence:
-          'This is a product rule. There is no validity study in this portfolio.',
+          'This is a product rule. I have not run a validity study on it.',
       },
       {
         problem: 'A block of questions encourages skipping ahead or freezing.',
@@ -546,7 +558,7 @@ export const caseStudies = [
     outcomes: [
       {
         kind: 'Status',
-        text: 'In progress as an independent weekend project. No public URL, usage figure, or confirmed price is published.',
+        text: 'In progress as a weekend project. The site is live at askmandy.us. I am not publishing a usage figure or a price yet.',
       },
       {
         kind: 'Qualitative',
@@ -559,10 +571,16 @@ export const caseStudies = [
     ],
     next: [
       'Confirm the current price before showing it. A prior ₹99 note is not treated as current.',
-      'Add a public link only when there is a URL that should be listed.',
-      'Test whether candidates understand which answers were scored. That comprehension check has not been run for this page.',
+      'Test whether candidates understand which answers were scored. I have not run that comprehension check yet.',
     ],
-    links: [],
+    links: [
+      {
+        label: 'askmandy.us',
+        href: 'https://www.askmandy.us',
+        verified: true,
+        verifiedAsOf: '14 October 2026',
+      },
+    ],
     media: {
       title: 'What is in the score',
       caption: 'Illustrative feedback structure. Not a real session and not a production screenshot.',
@@ -589,12 +607,13 @@ export const caseStudies = [
     year: 'Weekend project',
     dates: 'Independent project. Public site checked 12 October 2026.',
     featured: false,
+    site: 'niveshpustika.in',
     summary:
-      'A free web app and PWA for Indian traders to review closed trades: rupee P&L, futures and options lot sizes, win rate, profit factor, and an equity curve.',
+      'I built Nivesh Pustika as a free web app and PWA for Indian traders to review closed trades: rupee P&L, futures and options lot sizes, win rate, profit factor, and an equity curve.',
     audience:
-      'Indian traders who want to review their own closed trades in rupees, including futures and options, on the web or as an installed web app.',
+      'I built it for Indian traders who want to review their own closed trades in rupees, including futures and options, on the web or as an installed web app.',
     context:
-      'Nivesh Pustika is an independent weekend project. The public site is niveshpustika.in. It is a journal, not a broker and not an advice service. The live site was reachable on 12 October 2026. Sample numbers on a marketing page are not results from this portfolio.',
+      'Nivesh Pustika is a weekend project I built on my own. The public site is niveshpustika.in. It is a journal, not a broker and not an advice service. The sample numbers on the marketing page are interface examples, not results.',
     problem:
       'Traders can describe performance in tools that do not understand lot sizes, rupees, or the difference between an open idea and a closed trade. A broader product would start with broker connections before the review job is clear.',
     ownership: [
@@ -636,7 +655,7 @@ export const caseStudies = [
         tradeoff:
           'More release checks before a simple journal feels finished. Fewer ways for signup traffic to overwhelm the product.',
         evidence:
-          'The risks were part of review. This page does not describe how the limits are implemented.',
+          'The risks were part of my review. I am not describing how the limits are implemented.',
       },
     ],
     journey: [

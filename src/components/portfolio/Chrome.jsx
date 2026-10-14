@@ -25,67 +25,64 @@ export function ExternalLink({ href, children, className }) {
   );
 }
 
+/** Downloads the PDF in public/. Replace that file to update the resume. */
 export function ResumeButton({ className = 'button button--ghost' }) {
-  const [state, setState] = useState('idle');
-  const [message, setMessage] = useState('');
-
-  async function onClick() {
-    if (state === 'loading') return;
-    setState('loading');
-    setMessage('');
-    try {
-      const [{ pdf }, { default: ResumeDocument }, { resumeDownload }] = await Promise.all([
-        import('@react-pdf/renderer'),
-        import('../ResumeDocument'),
-        import('../../content/resumeDownload'),
-      ]);
-      const blob = await pdf(<ResumeDocument />).toBlob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = resumeDownload.filename || resumeAsset.filename;
-      link.click();
-      URL.revokeObjectURL(url);
-      setState('idle');
-    } catch (error) {
-      console.error('Resume PDF generation failed:', error);
-      setState('error');
-      setMessage(`The resume file could not be prepared. Email ${contact.email} and I will send it.`);
-    }
-  }
-
   return (
-    <span className="resume-action">
-      <button
-        type="button"
-        className={className}
-        onClick={onClick}
-        disabled={state === 'loading'}
-        aria-busy={state === 'loading'}
-      >
-        {state === 'loading' ? 'Preparing resume' : 'Download resume'}
-      </button>
-      <noscript>
-        <span className="form-note">
-          JavaScript is required to prepare the resume. Email {contact.email} instead.
-        </span>
-      </noscript>
-      {state === 'error' ? (
-        <p className="form-note" role="alert">
-          {message}
-        </p>
-      ) : null}
-    </span>
+    <a className={className} href={resumeAsset.publicPath} download={resumeAsset.filename}>
+      Download resume
+    </a>
   );
 }
+
+function useScrollSpy(ids, enabled) {
+  const [active, setActive] = useState('');
+
+  useEffect(() => {
+    if (!enabled) {
+      setActive('');
+      return undefined;
+    }
+    const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    if (sections.length === 0) return undefined;
+
+    const update = () => {
+      const line = window.innerHeight * 0.35;
+      let current = '';
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= line) current = section.id;
+      }
+      setActive(current);
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [ids, enabled]);
+
+  return active;
+}
+
+const navIds = navigation.map((item) => item.id);
 
 export function SiteHeader() {
   const { path, hash } = useRoute();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const active = useScrollSpy(navIds, path === '/');
 
   useEffect(() => {
     setOpen(false);
   }, [path, hash]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     function onKey(event) {
@@ -96,11 +93,14 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="site-header">
+    <header className={scrolled ? 'site-header is-scrolled' : 'site-header'}>
       <div className="header-inner">
         <AppLink to="/" className="wordmark" aria-label={`${profile.name}, home`}>
-          <span className="mark" aria-hidden="true" />
-          {profile.name}
+          <span className="monogram" aria-hidden="true">
+            <span>K</span>
+            <span>M</span>
+          </span>
+          <span className="wordmark-name">{profile.name}</span>
         </AppLink>
         <button
           type="button"
@@ -118,10 +118,14 @@ export function SiteHeader() {
         >
           <ul>
             {navigation.map((item) => {
-              const current = path === '/' && hash === `#${item.id}`;
+              const current = active === item.id;
               return (
                 <li key={item.id}>
-                  <AppLink to={item.href} aria-current={current ? 'true' : undefined}>
+                  <AppLink
+                    to={item.href}
+                    className={current ? 'is-active' : undefined}
+                    aria-current={current ? 'true' : undefined}
+                  >
                     {item.label}
                   </AppLink>
                 </li>

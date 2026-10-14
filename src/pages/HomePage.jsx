@@ -1,15 +1,14 @@
 import { pageMeta } from '../content/site';
 import { PageMeta, SiteFooter, SiteHeader } from '../components/portfolio/Chrome';
 import {
-  About,
+  AltaDxChapter,
   Approach,
   Contact,
+  EarlierRoles,
   Education,
-  Experience,
-  FeaturedWork,
+  FounderChapter,
   Hero,
-  IndependentWork,
-  ProofStrip,
+  OtherProjects,
   Skills,
 } from '../components/portfolio/HomeSections';
 
@@ -20,12 +19,11 @@ export default function HomePage() {
       <SiteHeader />
       <main id="main">
         <Hero />
-        <ProofStrip />
-        <FeaturedWork />
-        <IndependentWork />
+        <AltaDxChapter />
+        <FounderChapter />
+        <OtherProjects />
+        <EarlierRoles />
         <Approach />
-        <Experience />
-        <About />
         <Skills />
         <Education />
         <Contact />

@@ -106,7 +106,7 @@ export default function CaseStudyView({ study }) {
             ))}
           </p>
         ) : (
-          <p className="proof-scope">No public website is listed for this project.</p>
+          <p className="proof-scope">I have not listed a public website for this project.</p>
         )}
       </header>
 
@@ -119,8 +119,8 @@ export default function CaseStudyView({ study }) {
               </li>
             ))}
           </ul>
-          <AppLink className="text-link" to="/#work">
-            All selected work
+          <AppLink className="text-link" to="/#altadx">
+            Back to the overview
           </AppLink>
         </nav>
 
@@ -235,8 +235,8 @@ export default function CaseStudyView({ study }) {
           </section>
 
           <p className="study-end">
-            <AppLink className="text-link" to="/#work">
-              Back to selected work
+            <AppLink className="text-link" to="/#altadx">
+              Back to the overview
             </AppLink>
           </p>
         </div>

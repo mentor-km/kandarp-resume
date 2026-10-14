@@ -1,6 +1,7 @@
-import { getFeaturedStudies, getIndependentStudies } from '../../content/caseStudies';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { getCaseStudy, getIndependentStudies } from '../../content/caseStudies';
 import {
-  about,
+  altadxBeats,
   certifications,
   contact,
   education,
@@ -10,57 +11,196 @@ import {
   processSteps,
   profile,
   skillGroups,
+  tryfunzo,
 } from '../../content/site';
 import { AppLink } from '../../hooks/useRoute';
 import { ExternalLink, ResumeButton } from './Chrome';
 
-function ProjectCard({ study, featured = false }) {
+const pageIndex = [
+  { step: '01', label: 'AltaDX, the day job', href: '/#altadx' },
+  { step: '02', label: 'Founder and mentor', href: '/#founder' },
+  { step: '03', label: 'Other products', href: '/#projects' },
+  { step: '04', label: 'Earlier roles', href: '/#experience' },
+];
+
+function reducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Fades a block in the first time it scrolls into view. */
+function Reveal({ children, className = '' }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    if (reducedMotion()) {
+      setShown(true);
+      return undefined;
+    }
+    const showIfVisible = () => {
+      const rect = node.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) setShown(true);
+    };
+    showIfVisible();
+    window.addEventListener('scroll', showIfVisible, { passive: true });
+    window.addEventListener('resize', showIfVisible);
+    return () => {
+      window.removeEventListener('scroll', showIfVisible);
+      window.removeEventListener('resize', showIfVisible);
+    };
+  }, []);
+
   return (
-    <article className={featured ? 'project-card project-card--featured' : 'project-card'}>
-      <p className="card-kicker">
-        <span>{study.categoryLabel}</span>
-        <span aria-hidden="true">/</span>
-        <span>{study.statusLabel}</span>
-      </p>
-      <h3>{study.cardTitle}</h3>
-      <p className="card-role">
-        {study.role}
-        <span className="card-year">{study.year}</span>
-      </p>
-      <p className="card-summary">{study.summary}</p>
-      <AppLink className="text-link" to={study.path}>
-        Read case study
-      </AppLink>
-    </article>
+    <div ref={ref} className={`reveal${shown ? ' is-in' : ''} ${className}`.trim()}>
+      {children}
+    </div>
   );
+}
+
+/** Splits "30%" into { target: 30, suffix: '%' } without changing the published value. */
+function parseMetric(value) {
+  const match = String(value).match(/^([^\d]*)(\d[\d,]*)(\.\d+)?(.*)$/);
+  if (!match) return null;
+  const whole = match[2].replace(/,/g, '');
+  const decimals = match[3] ? match[3].length - 1 : 0;
+  return {
+    prefix: match[1],
+    target: Number(`${whole}${match[3] || ''}`),
+    decimals,
+    suffix: match[4],
+  };
+}
+
+/** Counts up with an exponential ease-out over 1.8s when scrolled into view. */
+function CountUp({ value }) {
+  const ref = useRef(null);
+  const parsed = useMemo(() => parseMetric(value), [value]);
+  const [text, setText] = useState(parsed ? `${parsed.prefix}${(0).toFixed(parsed.decimals)}${parsed.suffix}` : value);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || !parsed) return undefined;
+    if (reducedMotion()) {
+      setText(value);
+      return undefined;
+    }
+    let frame = 0;
+    const run = () => {
+      const start = performance.now();
+      const duration = 1800;
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        const current = parsed.target * eased;
+        setText(`${parsed.prefix}${current.toFixed(parsed.decimals)}${parsed.suffix}`);
+        if (t < 1) frame = requestAnimationFrame(tick);
+        else setText(value);
+      };
+      frame = requestAnimationFrame(tick);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        run();
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [value, parsed]);
+
+  return (
+    <span
+      ref={ref}
+      className="proof-value"
+      data-count-target={parsed?.target}
+      data-prefix={parsed?.prefix}
+      data-suffix={parsed?.suffix}
+      data-decimals={parsed?.decimals}
+    >
+      {text}
+    </span>
+  );
+}
+
+function Metric({ id }) {
+  const metric = getPublicMetrics().find((item) => item.id === id);
+  if (!metric) return null;
+
+  return (
+    <p className="metric-callout">
+      <CountUp value={metric.value} />
+      <span className="proof-label">{metric.label}</span>
+      <span className="proof-scope">{metric.scope}</span>
+      <span className="proof-asof">{metric.asOf}</span>
+    </p>
+  );
+}
+
+function SiteLine({ links = [], site, live = true }) {
+  const verified = links.filter((link) => link.verified);
+  if (verified.length > 0) {
+    return (
+      <p className="site-line">
+        {verified.map((link) => (
+          <ExternalLink key={link.href} className="site-link" href={link.href}>
+            {link.label}
+          </ExternalLink>
+        ))}
+      </p>
+    );
+  }
+  if (site) {
+    return (
+      <p className="site-line">
+        <span className="site-link site-link--pending">{site}</span>
+        {live ? null : <span className="site-note">not live yet</span>}
+      </p>
+    );
+  }
+  return null;
+}
+
+function Hairline() {
+  return <hr className="hairline" aria-hidden="true" />;
 }
 
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-heading">
-      <div className="hero-copy">
+      <div className="hero-copy hero-reveal">
         <p className="eyebrow">{profile.location}</p>
-        <p className="hero-name">{profile.name}</p>
+        <p className="hero-hello">
+          Hey, I&apos;m
+        </p>
+        <h1 id="hero-heading" className="hero-name">
+          {profile.name}
+        </h1>
         <p className="hero-role">{profile.role}</p>
-        <h1 id="hero-heading">{profile.valueProposition}</h1>
-        <p className="hero-support">{profile.supporting}</p>
+        <p className="hero-headline">
+          <em className="accent-phrase">I turn complex business problems</em> into useful AI products, from discovery and
+          product definition to prototypes, delivery, and continuous improvement.
+        </p>
         <div className="hero-actions">
-          <AppLink className="button" to="/#work">
-            Explore selected work
+          <ResumeButton className="button" />
+          <AppLink className="button button--ghost" to="/#altadx">
+            Start with my day job
           </AppLink>
-          <ResumeButton />
-          <ExternalLink className="text-link" href={contact.linkedin}>
-            Connect on LinkedIn
-          </ExternalLink>
         </div>
       </div>
-      <aside className="hero-motif" aria-label="Product workflow">
-        <p className="eyebrow">From discovery to delivery</p>
+      <aside className="hero-motif" aria-label="On this page">
+        <p className="eyebrow">On this page</p>
         <ol>
-          {processSteps.map((step) => (
-            <li key={step.id}>
-              <span>{step.step}</span>
-              <AppLink to="/#approach">{step.title}</AppLink>
+          {pageIndex.map((item) => (
+            <li key={item.href}>
+              <span>{item.step}</span>
+              <AppLink to={item.href}>{item.label}</AppLink>
             </li>
           ))}
         </ol>
@@ -69,82 +209,232 @@ export function Hero() {
   );
 }
 
-export function ProofStrip() {
-  const items = getPublicMetrics();
+export function AltaDxChapter() {
+  const role = experience.find((job) => job.id === 'altadx');
+  const study = getCaseStudy('omap-agentic-ai');
+  if (!role) return null;
 
   return (
-    <section className="proof" aria-labelledby="proof-heading">
-      <h2 id="proof-heading" className="sr-only">
-        Approved evidence
-      </h2>
-      {items.length === 0 ? (
-        <p className="empty-state">No publicly approved proof points are marked for display.</p>
-      ) : (
-        <ul className="proof-grid">
-          {items.map((metric) => (
-            <li key={metric.id}>
-              <p className="proof-value">{metric.value}</p>
-              <p className="proof-label">{metric.label}</p>
-              <p className="proof-scope">{metric.scope}</p>
-              <p className="proof-asof">{metric.asOf}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-      <p className="proof-note">
-        The Round1 count is product usage by a client. It is not a count of interviews Kandarp conducted.
-        The pod count is coordination scope. The percentages are earlier employment outcomes.
-      </p>
-    </section>
-  );
-}
-
-export function FeaturedWork() {
-  const studies = getFeaturedStudies();
-
-  return (
-    <section className="section" id="work" aria-labelledby="work-heading">
-      <div className="section-intro">
-        <p className="eyebrow">Featured work</p>
-        <h2 id="work-heading">OMAP and Round1</h2>
-        <p className="lede">
-          OMAP is full-time product work at AltaDX. Round1 is a founder product. They are not the same kind of role, and the pages keep that boundary visible.
+    <section className="section chapter" id="altadx" aria-labelledby="altadx-heading">
+      <Reveal>
+        <p className="chapter-index">Experience / 01</p>
+        <p className="card-kicker">
+          <span>Full-time role</span>
+          <span aria-hidden="true">/</span>
+          <span>{study?.statusLabel}</span>
         </p>
-      </div>
-      {studies.length === 0 ? (
-        <p className="empty-state">Featured case studies are not available.</p>
-      ) : (
-        <div className="card-grid card-grid--featured">
-          {studies.map((study) => (
-            <ProjectCard key={study.slug} study={study} featured />
+        <h2 id="altadx-heading">{role.org}</h2>
+        <p className="chapter-meta">
+          {role.title}
+          <span>
+            {role.dates}, {role.location}
+          </span>
+        </p>
+        <SiteLine links={study?.links} site={study?.site} />
+        <p className="chapter-headline">
+          I define product for an agentic platform that fitness and wellness operators{' '}
+          <em className="accent-phrase">can configure themselves.</em>
+        </p>
+        <p className="lede">
+          OMAP lets a business set up digital agents inside the workflows it already runs. My job is to decide what those
+          agents should do, write it down clearly enough to build, and get it shipped across four pods.
+        </p>
+        <div className="beat-grid">
+          {altadxBeats.map((beat) => (
+            <article key={beat.step}>
+              <p className="process-step">{beat.step}</p>
+              <h3>{beat.title}</h3>
+              <p>{beat.text}</p>
+            </article>
           ))}
         </div>
-      )}
+        <Metric id="pods" />
+        <p className="impact-note">
+          One concrete result: after I separated QA Hold and QA-found defects from new commitments, the sprint view
+          showed 7.5% scope growth instead of the 64.5% reported earlier. That corrected the measurement. It did not
+          shrink the real work.
+        </p>
+        {study ? (
+          <AppLink className="text-link" to={study.path}>
+            Read the OMAP case study
+          </AppLink>
+        ) : null}
+      </Reveal>
+      <Hairline />
     </section>
   );
 }
 
-export function IndependentWork() {
+export function FounderChapter() {
+  const round1 = getCaseStudy('round1');
+
+  return (
+    <section className="section chapter chapter--founder" id="founder" aria-labelledby="founder-heading">
+      <Reveal>
+        <p className="chapter-index">Founder / 02</p>
+        <h2 id="founder-heading">
+          What I build <em className="accent-phrase">outside the day job</em>
+        </h2>
+        <p className="lede">
+          Round1 and Analystbychance are mine. Neither is AltaDX work, and neither is a weekend experiment.
+        </p>
+        {round1 ? (
+          <article className="work-piece">
+            <p className="card-kicker">
+              <span>{round1.categoryLabel}</span>
+              <span aria-hidden="true">/</span>
+              <span>{round1.statusLabel}</span>
+            </p>
+            <h3>{round1.cardTitle}</h3>
+            <SiteLine links={round1.links} site={round1.site} />
+            <p className="chapter-meta">
+              {round1.role}
+              <span>{round1.dates}</span>
+            </p>
+            <p>{round1.summary}</p>
+            <ul className="work-points">
+              <li>I defined the interview flow, the scoring rules, and the packaging, including trial terms and refund rules.</li>
+              <li>Technical skill is weighted 80 and communication 20, and I state that split instead of hiding it in the model.</li>
+              <li>A minimum-answer gate holds back a full recommendation when the conversation was too short to support one.</li>
+              <li>Integrity cues are shown as signals for a human to review, never as proof of dishonesty.</li>
+            </ul>
+            <Metric id="round1-interviews" />
+            <p className="founder-boundary">
+              I do not claim that Round1 improved hire quality, reduced bias, or saved a measured amount of recruiter time.
+            </p>
+            <div className="piece-links">
+              <AppLink className="text-link" to={round1.path}>
+                Read the Round1 case study
+              </AppLink>
+            </div>
+          </article>
+        ) : null}
+        <article className="work-piece">
+          <p className="card-kicker">
+            <span>{founderInitiative.category}</span>
+            <span aria-hidden="true">/</span>
+            <span>{founderInitiative.role}</span>
+          </p>
+          <h3>{founderInitiative.name}</h3>
+          <SiteLine
+            links={[{ label: 'analystbychance.com', href: founderInitiative.href, verified: founderInitiative.verified }]}
+          />
+          <p>{founderInitiative.summary}</p>
+          <p className="founder-boundary">{founderInitiative.note}</p>
+        </article>
+      </Reveal>
+      <Hairline />
+    </section>
+  );
+}
+
+function ProjectPiece({ study }) {
+  return (
+    <article className="work-piece">
+      <p className="card-kicker">
+        <span>{study.categoryLabel}</span>
+        <span aria-hidden="true">/</span>
+        <span>{study.statusLabel}</span>
+      </p>
+      <h3>{study.cardTitle}</h3>
+      <SiteLine links={study.links} site={study.site} />
+      <p className="chapter-meta">
+        {study.role}
+        <span>{study.dates}</span>
+      </p>
+      <p>{study.summary}</p>
+      <p>{study.problem}</p>
+      <ul className="work-points">
+        {study.ownership.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+      <div className="piece-links">
+        <AppLink className="text-link" to={study.path}>
+          Read the case study
+        </AppLink>
+      </div>
+    </article>
+  );
+}
+
+export function OtherProjects() {
   const studies = getIndependentStudies();
 
   return (
-    <section className="section section--tight" id="projects" aria-labelledby="projects-heading">
-      <div className="section-intro">
-        <p className="eyebrow">Independent projects</p>
-        <h2 id="projects-heading">Weekend products</h2>
+    <section className="section chapter" id="projects" aria-labelledby="projects-heading">
+      <Reveal>
+        <p className="chapter-index">Products / 03</p>
+        <h2 id="projects-heading">
+          Things I built <em className="accent-phrase">to see if they work</em>
+        </h2>
         <p className="lede">
-          Chirppy, Ask Mandy, and Nivesh Pustika are independent weekend projects. They are separate from employment and from founder companies.
+          These are weekend products. I build them to test a product decision with real users, and I label each one at
+          the stage it has actually reached.
         </p>
-      </div>
-      {studies.length === 0 ? (
-        <p className="empty-state">Independent projects are not available.</p>
-      ) : (
-        <div className="card-grid card-grid--three">
-          {studies.map((study) => (
-            <ProjectCard key={study.slug} study={study} />
+        {studies.map((study) => (
+          <ProjectPiece key={study.slug} study={study} />
+        ))}
+        <article className="work-piece">
+          <p className="card-kicker">
+            <span>Independent concept</span>
+            <span aria-hidden="true">/</span>
+            <span>{tryfunzo.status}</span>
+          </p>
+          <h3>{tryfunzo.name}</h3>
+          <SiteLine site={tryfunzo.site} live={tryfunzo.siteLive} />
+          <p className="chapter-meta">{tryfunzo.role}</p>
+          <p>{tryfunzo.summary}</p>
+          <ul className="work-points">
+            {tryfunzo.points.map((point) => (
+              <li key={point}>{point}</li>
+            ))}
+          </ul>
+        </article>
+      </Reveal>
+      <Hairline />
+    </section>
+  );
+}
+
+export function EarlierRoles() {
+  const roles = experience.filter((job) => job.id !== 'altadx');
+
+  return (
+    <section className="section chapter" id="experience" aria-labelledby="experience-heading">
+      <Reveal>
+        <p className="chapter-index">Experience / 04</p>
+        <h2 id="experience-heading">
+          The road <em className="accent-phrase">to product</em>
+        </h2>
+        <p className="lede">
+          I started as a trainer, moved into reporting, then business analysis, and then product ownership. These are my
+          full-time roles before AltaDX, newest first.
+        </p>
+        <ol className="timeline">
+          {roles.map((job) => (
+            <li key={job.id}>
+              <p className="timeline-dates">{job.dates}</p>
+              <div className="timeline-body">
+                <h3>{job.title}</h3>
+                <p className="timeline-org">
+                  {job.org}
+                  <span>{job.location}</span>
+                </p>
+                <p>{job.summary}</p>
+                <ul className="work-points">
+                  {job.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+                {job.id === 'ktek' ? <Metric id="ktek-onboarding" /> : null}
+                {job.id === 'wealth' ? <Metric id="wealth-reporting" /> : null}
+              </div>
+            </li>
           ))}
-        </div>
-      )}
+        </ol>
+      </Reveal>
+      <Hairline />
     </section>
   );
 }
@@ -152,93 +442,26 @@ export function IndependentWork() {
 export function Approach() {
   return (
     <section className="section" id="approach" aria-labelledby="approach-heading">
-      <div className="section-intro">
-        <p className="eyebrow">How I work</p>
-        <h2 id="approach-heading">Five steps, used as a guide rather than a script</h2>
+      <Reveal>
+        <p className="chapter-index">Method / 05</p>
+        <h2 id="approach-heading">
+          How I work, <em className="accent-phrase">as a guide rather than a script</em>
+        </h2>
         <p className="lede">
-          Not every project passes through these steps in order. The sequence is how I keep an AI idea tied to a workflow, a rule, and a release.
+          Not every project passes through these steps in order. The sequence is how I keep an AI idea tied to a
+          workflow, a rule, and a release.
         </p>
-      </div>
-      <ol className="process-list">
-        {processSteps.map((step) => (
-          <li key={step.id}>
-            <span className="process-step">{step.step}</span>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </li>
-        ))}
-      </ol>
-      <ul className="principle-list">
-        <li>AI behaviour is a product-design problem, not only a prompt.</li>
-        <li>Guardrails need a failure state: grounded retrieval, explicit scores, a way out, and honest uncertainty.</li>
-        <li>Simplifying a workflow can be worth more than another feature.</li>
-        <li>A delivery report should separate new scope from QA Hold and from defects found in QA.</li>
-        <li>A prototype can test an assumption early. It is not automatically ready for customers.</li>
-      </ul>
-    </section>
-  );
-}
-
-export function Experience() {
-  return (
-    <section className="section" id="experience" aria-labelledby="experience-heading">
-      <div className="section-intro">
-        <p className="eyebrow">Experience</p>
-        <h2 id="experience-heading">Employment timeline</h2>
-        <p className="lede">
-          Full-time roles only. Round1 and Analystbychance are founder work and sit outside this list.
-        </p>
-      </div>
-      <ol className="timeline">
-        {experience.map((job) => (
-          <li key={job.id}>
-            <p className="timeline-dates">{job.dates}</p>
-            <div className="timeline-body">
-              <h3>{job.title}</h3>
-              <p className="timeline-org">
-                {job.org}
-                <span>{job.location}</span>
-              </p>
-              <p>{job.summary}</p>
-              <ul>
-                {job.points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
-  );
-}
-
-export function About() {
-  return (
-    <section className="section" id="about" aria-labelledby="about-heading">
-      <div className="section-intro">
-        <p className="eyebrow">About</p>
-        <h2 id="about-heading">Career evolution</h2>
-        <p className="lede">{about.lead}</p>
-      </div>
-      <div className="prose">
-        {about.paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </div>
-      <aside className="founder-note">
-        <p className="card-kicker">
-          <span>{founderInitiative.category}</span>
-          <span aria-hidden="true">/</span>
-          <span>{founderInitiative.role}</span>
-        </p>
-        <h3>{founderInitiative.name}</h3>
-        <p>{founderInitiative.summary}</p>
-        <p className="founder-boundary">{founderInitiative.note}</p>
-        <ExternalLink className="text-link" href={founderInitiative.href}>
-          analystbychance.com
-        </ExternalLink>
-      </aside>
+        <ol className="process-list">
+          {processSteps.map((step) => (
+            <li key={step.id}>
+              <span className="process-step">{step.step}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))}
+        </ol>
+      </Reveal>
+      <Hairline />
     </section>
   );
 }
@@ -246,25 +469,29 @@ export function About() {
 export function Skills() {
   return (
     <section className="section" id="skills" aria-labelledby="skills-heading">
-      <div className="section-intro">
-        <p className="eyebrow">Skills</p>
-        <h2 id="skills-heading">What I use in the work</h2>
+      <Reveal>
+        <p className="chapter-index">Toolbox / 06</p>
+        <h2 id="skills-heading">
+          What I use <em className="accent-phrase">in the work</em>
+        </h2>
         <p className="lede">
-          Labels, not ratings. Technical fluency means I can specify and prototype with these tools. It is not a claim that I am a specialist engineer.
+          Labels, not ratings. Technical fluency means I can specify and prototype with these tools. I am not claiming to
+          be a specialist engineer.
         </p>
-      </div>
-      <div className="skill-grid">
-        {skillGroups.map((group) => (
-          <section key={group.id} aria-labelledby={`skill-${group.id}`}>
-            <h3 id={`skill-${group.id}`}>{group.title}</h3>
-            <ul>
-              {group.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
+        <div className="skill-grid">
+          {skillGroups.map((group) => (
+            <section key={group.id} aria-labelledby={`skill-${group.id}`}>
+              <h3 id={`skill-${group.id}`}>{group.title}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </Reveal>
+      <Hairline />
     </section>
   );
 }
@@ -272,32 +499,35 @@ export function Skills() {
 export function Education() {
   return (
     <section className="section" id="education" aria-labelledby="education-heading">
-      <div className="section-intro">
-        <p className="eyebrow">Education and certifications</p>
-        <h2 id="education-heading">Study and credentials</h2>
-      </div>
-      <div className="edu-layout">
-        <ul className="edu-list">
-          {education.map((item) => (
-            <li key={item.id}>
-              <h3>{item.title}</h3>
-              <p className="timeline-org">
-                {item.org}
-                <span>{item.dates}</span>
-              </p>
-              {item.note ? <p>{item.note}</p> : null}
-            </li>
-          ))}
-        </ul>
-        <div>
-          <h3 className="cert-heading">Certifications</h3>
-          <ul className="cert-list">
-            {certifications.map((item) => (
-              <li key={item}>{item}</li>
+      <Reveal>
+        <p className="chapter-index">Credentials / 07</p>
+        <h2 id="education-heading">
+          Study <em className="accent-phrase">and certifications</em>
+        </h2>
+        <div className="edu-layout">
+          <ul className="edu-list">
+            {education.map((item) => (
+              <li key={item.id}>
+                <h3>{item.title}</h3>
+                <p className="timeline-org">
+                  {item.org}
+                  <span>{item.dates}</span>
+                </p>
+                {item.note ? <p>{item.note}</p> : null}
+              </li>
             ))}
           </ul>
+          <div>
+            <h3 className="cert-heading">Certifications</h3>
+            <ul className="cert-list">
+              {certifications.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      </Reveal>
+      <Hairline />
     </section>
   );
 }
@@ -305,22 +535,24 @@ export function Education() {
 export function Contact() {
   return (
     <section className="section" id="contact" aria-labelledby="contact-heading">
-      <div className="contact-panel">
-        <p className="eyebrow">Contact</p>
-        <h2 id="contact-heading">Start with the work, then write</h2>
-        <p className="lede">
-          Email and LinkedIn are the contact paths. There is no form on this site.
-        </p>
-        <div className="contact-actions">
-          <ExternalLink className="button" href={contact.mailto}>
-            {contact.email}
-          </ExternalLink>
-          <ExternalLink className="button button--ghost" href={contact.linkedin}>
-            LinkedIn
-          </ExternalLink>
-          <ResumeButton className="button button--ghost" />
+      <Reveal>
+        <div className="contact-panel">
+          <p className="chapter-index">Contact / 08</p>
+          <h2 id="contact-heading">
+            Start with the work, <em className="accent-phrase">then write to me</em>
+          </h2>
+          <p className="lede">Email and LinkedIn are how to reach me. I do not run a contact form here.</p>
+          <div className="contact-actions">
+            <ExternalLink className="button" href={contact.mailto}>
+              {contact.email}
+            </ExternalLink>
+            <ExternalLink className="button button--ghost" href={contact.linkedin}>
+              LinkedIn
+            </ExternalLink>
+            <ResumeButton className="button button--ghost" />
+          </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
