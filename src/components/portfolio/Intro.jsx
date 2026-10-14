@@ -4,18 +4,19 @@ import { useEffect, useRef } from 'react';
 /* Intro settings. Colours are read from the CSS variables in :root.   */
 /* ------------------------------------------------------------------ */
 const INTRO_MS = 3400;
-const SEEN_KEY = 'km-intro-seen';
 const INITIALS = ['K', 'M'];
 const FULL_NAME = 'Kandarp Mathur';
 
+/**
+ * Plays on every full load of the home page, including a refresh.
+ * Moving between pages inside the site does not reload, so it will not replay then.
+ * Skipped for reduced motion and when someone lands directly on a case study.
+ */
 export function shouldPlayIntro() {
   if (typeof window === 'undefined') return false;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
-  try {
-    return window.sessionStorage.getItem(SEEN_KEY) !== '1';
-  } catch {
-    return true;
-  }
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  return path === '/';
 }
 
 function cssVar(name, fallback) {
@@ -136,11 +137,6 @@ export default function Intro({ onDone }) {
       root.classList.remove('intro-pending');
       root.classList.add('intro-done');
       document.body.style.overflow = previousOverflow;
-      try {
-        window.sessionStorage.setItem(SEEN_KEY, '1');
-      } catch {
-        /* storage unavailable */
-      }
       window.setTimeout(() => onDone?.(), 420);
     };
 
