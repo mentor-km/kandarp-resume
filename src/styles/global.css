@@ -991,6 +991,127 @@ html.intro-pending .hero-motif {
   color: var(--text);
 }
 
+/* Toolbox: a rattling box in the centre, cards fly out of it on click */
+.toolbox {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.toolbox-button {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.25rem 0.9rem;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform 0.4s var(--ease), color 0.3s ease;
+}
+
+.toolbox-button:hover {
+  transform: translateY(-3px);
+  color: var(--text);
+}
+
+.toolbox.is-open .toolbox-button {
+  cursor: default;
+  color: var(--faint);
+}
+
+.toolbox-icon {
+  width: clamp(8rem, 20vw, 12rem);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5));
+}
+
+.toolbox-body {
+  fill: var(--walnut);
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.5;
+}
+
+.toolbox-tray {
+  fill: rgba(0, 0, 0, 0.35);
+}
+
+.toolbox-rivet {
+  fill: var(--warm);
+}
+
+.toolbox-plate {
+  fill: var(--warm);
+}
+
+.toolbox-feet {
+  fill: #2d1f16;
+}
+
+.toolbox-lid-group {
+  transform-origin: 14px 58px;
+  transition: transform 0.8s var(--ease);
+}
+
+.toolbox-lid {
+  fill: #6d4b34;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.5;
+}
+
+.toolbox-lid-line {
+  fill: rgba(0, 0, 0, 0.3);
+}
+
+.toolbox-handle {
+  fill: var(--warm);
+}
+
+.toolbox-handle-gap {
+  fill: var(--bg);
+}
+
+.toolbox-latch {
+  fill: var(--accent);
+}
+
+.toolbox-tools {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s ease 0.2s, transform 0.7s var(--ease) 0.2s;
+}
+
+.toolbox.is-open .toolbox-lid-group {
+  transform: rotate(-38deg) translate(-4px, -4px);
+}
+
+.toolbox.is-open .toolbox-tools {
+  opacity: 1;
+  transform: none;
+}
+
+/* Two rows of three wrap the box: one above, one below. --rest is the final
+   arc position of each card (set at desktop widths below); the fly-out
+   animation lands on it and hover lifts from it. */
+.toolbox-row {
+  width: 100%;
+}
+
+.toolbox-row > section {
+  --rest: none;
+  transform: var(--rest);
+}
+
+html.js .reveal.is-in .toolbox-row > section:hover {
+  transform: var(--rest) translateY(-3px);
+}
+
 .edu-layout {
   display: grid;
   gap: 1.5rem;
@@ -1477,15 +1598,57 @@ html.intro-pending .hero-motif {
     bottom: 0;
   }
 
-  .hero {
-    grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 0.65fr);
-    align-items: center;
-    gap: 3rem;
+  .hero-copy {
+    max-width: 52rem;
   }
 
   .skill-grid,
   .rule-grid {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  /* Arc the two rows around the toolbox: outer cards sit closer to the box
+     and tilt inward, and the corners facing the box are rounded further. */
+  .toolbox {
+    gap: 0.5rem;
+  }
+
+  .toolbox-row--above {
+    align-items: end;
+  }
+
+  .toolbox-row--below {
+    align-items: start;
+  }
+
+  .toolbox-row--above > section:nth-child(1) {
+    --rest: translateY(1.5rem) rotate(-3deg);
+    border-bottom-right-radius: 2.25rem;
+  }
+
+  .toolbox-row--above > section:nth-child(2) {
+    border-bottom-left-radius: 2.25rem;
+    border-bottom-right-radius: 2.25rem;
+  }
+
+  .toolbox-row--above > section:nth-child(3) {
+    --rest: translateY(1.5rem) rotate(3deg);
+    border-bottom-left-radius: 2.25rem;
+  }
+
+  .toolbox-row--below > section:nth-child(1) {
+    --rest: translateY(-1.5rem) rotate(3deg);
+    border-top-right-radius: 2.25rem;
+  }
+
+  .toolbox-row--below > section:nth-child(2) {
+    border-top-left-radius: 2.25rem;
+    border-top-right-radius: 2.25rem;
+  }
+
+  .toolbox-row--below > section:nth-child(3) {
+    --rest: translateY(-1.5rem) rotate(-3deg);
+    border-top-left-radius: 2.25rem;
   }
 
   .study-layout {
@@ -1603,12 +1766,85 @@ html.intro-pending .hero-motif {
     transition-delay: 0.5s;
   }
 
+  /* Toolbox cards use their own fly-out animation instead of the stagger above. */
+  html.js .reveal .toolbox-row > section,
+  html.js .reveal.is-in .toolbox-row > section {
+    opacity: 1;
+    transform: var(--rest);
+    transition:
+      transform 0.45s var(--ease),
+      border-color 0.45s var(--ease),
+      background-color 0.45s var(--ease),
+      box-shadow 0.45s var(--ease);
+  }
+
+  .toolbox:not(.is-open) .toolbox-icon {
+    animation: rattle 2.4s ease-in-out infinite;
+  }
+
+  .toolbox.is-flying .toolbox-row > section {
+    animation: fly-out 0.9s var(--ease) both;
+    animation-delay: calc(var(--fly-delay, 0ms) + 0.25s);
+  }
+
   /* Hovered cards keep their lift even while the entrance transition is set. */
   html.js .reveal.is-in .work-piece:hover,
   html.js .reveal.is-in .beat-grid article:hover,
   html.js .reveal.is-in .skill-grid > section:hover {
     transform: translateY(-3px);
     transition-delay: 0s;
+  }
+}
+
+@keyframes rattle {
+  0%,
+  58%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+
+  62% {
+    transform: translate(-3px, 1px) rotate(-3deg);
+  }
+
+  66% {
+    transform: translate(3px, -1px) rotate(3deg);
+  }
+
+  70% {
+    transform: translate(-3px, 0) rotate(-2.5deg);
+  }
+
+  74% {
+    transform: translate(3px, 1px) rotate(2.5deg);
+  }
+
+  78% {
+    transform: translate(-2px, 0) rotate(-1.5deg);
+  }
+
+  82% {
+    transform: translate(2px, 0) rotate(1.5deg);
+  }
+
+  86% {
+    transform: translate(0, 0) rotate(0);
+  }
+}
+
+@keyframes fly-out {
+  from {
+    opacity: 0;
+    transform: translate(var(--fly-x, 0), var(--fly-y, 0)) scale(0.2) rotate(-6deg);
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: var(--rest, none);
   }
 }
 

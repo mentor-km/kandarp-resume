@@ -145,7 +145,6 @@ export function SiteFooter() {
         <div>
           <p className="footer-name">{profile.name}</p>
           <p className="footer-role">{profile.role}</p>
-          <p className="footer-meta">{contact.location}</p>
         </div>
         <ul className="footer-links">
           <li>

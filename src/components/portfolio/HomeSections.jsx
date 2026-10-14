@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getCaseStudy, getIndependentStudies } from '../../content/caseStudies';
 import {
   altadxBeats,
@@ -15,13 +15,6 @@ import {
 } from '../../content/site';
 import { AppLink } from '../../hooks/useRoute';
 import { ExternalLink, ResumeButton } from './Chrome';
-
-const pageIndex = [
-  { step: '01', label: 'AltaDX, the day job', href: '/#altadx' },
-  { step: '02', label: 'Founder and mentor', href: '/#founder' },
-  { step: '03', label: 'Other products', href: '/#projects' },
-  { step: '04', label: 'Earlier roles', href: '/#experience' },
-];
 
 function reducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -175,7 +168,6 @@ export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-heading">
       <div className="hero-copy hero-reveal">
-        <p className="eyebrow">{profile.location}</p>
         <p className="hero-hello">
           Hey, I&apos;m
         </p>
@@ -189,22 +181,8 @@ export function Hero() {
         </p>
         <div className="hero-actions">
           <ResumeButton className="button" />
-          <AppLink className="button button--ghost" to="/#altadx">
-            Start with my day job
-          </AppLink>
         </div>
       </div>
-      <aside className="hero-motif" aria-label="On this page">
-        <p className="eyebrow">On this page</p>
-        <ol>
-          {pageIndex.map((item) => (
-            <li key={item.href}>
-              <span>{item.step}</span>
-              <AppLink to={item.href}>{item.label}</AppLink>
-            </li>
-          ))}
-        </ol>
-      </aside>
     </section>
   );
 }
@@ -217,7 +195,7 @@ export function AltaDxChapter() {
   return (
     <section className="section chapter" id="altadx" aria-labelledby="altadx-heading">
       <Reveal>
-        <p className="chapter-index">Experience / 01</p>
+        <p className="chapter-index">Experience</p>
         <p className="card-kicker">
           <span>Full-time role</span>
           <span aria-hidden="true">/</span>
@@ -226,9 +204,7 @@ export function AltaDxChapter() {
         <h2 id="altadx-heading">{role.org}</h2>
         <p className="chapter-meta">
           {role.title}
-          <span>
-            {role.dates}, {role.location}
-          </span>
+          <span>{role.dates}</span>
         </p>
         <SiteLine links={study?.links} site={study?.site} />
         <p className="chapter-headline">
@@ -271,7 +247,7 @@ export function FounderChapter() {
   return (
     <section className="section chapter chapter--founder" id="founder" aria-labelledby="founder-heading">
       <Reveal>
-        <p className="chapter-index">Founder / 02</p>
+        <p className="chapter-index">Founder</p>
         <h2 id="founder-heading">
           What I build <em className="accent-phrase">outside the day job</em>
         </h2>
@@ -364,7 +340,7 @@ export function OtherProjects() {
   return (
     <section className="section chapter" id="projects" aria-labelledby="projects-heading">
       <Reveal>
-        <p className="chapter-index">Products / 03</p>
+        <p className="chapter-index">Products</p>
         <h2 id="projects-heading">
           Things I built <em className="accent-phrase">to see if they work</em>
         </h2>
@@ -403,7 +379,7 @@ export function EarlierRoles() {
   return (
     <section className="section chapter" id="experience" aria-labelledby="experience-heading">
       <Reveal>
-        <p className="chapter-index">Experience / 04</p>
+        <p className="chapter-index">Earlier roles</p>
         <h2 id="experience-heading">
           The road <em className="accent-phrase">to product</em>
         </h2>
@@ -443,7 +419,7 @@ export function Approach() {
   return (
     <section className="section" id="approach" aria-labelledby="approach-heading">
       <Reveal>
-        <p className="chapter-index">Method / 05</p>
+        <p className="chapter-index">Method</p>
         <h2 id="approach-heading">
           How I work, <em className="accent-phrase">as a guide rather than a script</em>
         </h2>
@@ -466,11 +442,92 @@ export function Approach() {
   );
 }
 
+function ToolboxIcon() {
+  return (
+    <svg className="toolbox-icon" viewBox="0 0 160 120" aria-hidden="true">
+      {/* Tools peeking out once the lid lifts */}
+      <g className="toolbox-tools">
+        <rect x="56" y="30" width="6" height="34" rx="2" fill="#d5851f" transform="rotate(-14 59 47)" />
+        <rect x="52" y="22" width="14" height="10" rx="2" fill="#87a96b" transform="rotate(-14 59 27)" />
+        <rect x="92" y="28" width="6" height="36" rx="2" fill="#87a96b" transform="rotate(12 95 46)" />
+        <path d="M86 22h18l-4 8h-10z" fill="#d5851f" transform="rotate(12 95 26)" />
+        <circle cx="76" cy="34" r="7" fill="none" stroke="#fff" strokeWidth="3" />
+      </g>
+      {/* Lower chest */}
+      <rect className="toolbox-body" x="14" y="56" width="132" height="50" rx="6" />
+      <rect className="toolbox-tray" x="14" y="56" width="132" height="8" />
+      <rect className="toolbox-rivet" x="24" y="76" width="6" height="6" rx="1" />
+      <rect className="toolbox-rivet" x="130" y="76" width="6" height="6" rx="1" />
+      <rect className="toolbox-plate" x="64" y="76" width="32" height="14" rx="2" />
+      <rect className="toolbox-feet" x="22" y="106" width="20" height="5" rx="2" />
+      <rect className="toolbox-feet" x="118" y="106" width="20" height="5" rx="2" />
+      {/* Lid with handle and two latches, hinged at the back-left corner */}
+      <g className="toolbox-lid-group">
+        <rect className="toolbox-lid" x="14" y="38" width="132" height="20" rx="5" />
+        <rect className="toolbox-lid-line" x="14" y="52" width="132" height="2" />
+        <rect className="toolbox-handle" x="56" y="22" width="48" height="18" rx="7" />
+        <rect className="toolbox-handle-gap" x="63" y="28" width="34" height="6" rx="3" />
+        <rect className="toolbox-latch" x="36" y="50" width="12" height="12" rx="2" />
+        <rect className="toolbox-latch" x="112" y="50" width="12" height="12" rx="2" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * A toolbox sits in the centre and rattles. A click opens it and the six
+ * skill cards fly out from the box into the grid.
+ */
 export function Skills() {
+  const [open, setOpen] = useState(() => (typeof window !== 'undefined' ? reducedMotion() : false));
+  const [animate, setAnimate] = useState(false);
+  const wrapRef = useRef(null);
+  const boxRef = useRef(null);
+  const above = skillGroups.slice(0, 3);
+  const below = skillGroups.slice(3, 6);
+
+  const openBox = () => {
+    if (open) return;
+    setAnimate(!reducedMotion());
+    setOpen(true);
+  };
+
+  // Once the rows are laid out around the box, measure how far each card sits
+  // from the box centre so the fly-out starts from the toolbox itself.
+  useLayoutEffect(() => {
+    if (!open || !animate) return;
+    const wrap = wrapRef.current;
+    const box = boxRef.current;
+    if (!wrap || !box) return;
+    const from = box.getBoundingClientRect();
+    const fromX = from.left + from.width / 2;
+    const fromY = from.top + from.height / 2;
+    const cards = [...wrap.querySelectorAll('.toolbox-row > section')];
+    cards.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--fly-x', `${fromX - (rect.left + rect.width / 2)}px`);
+      card.style.setProperty('--fly-y', `${fromY - (rect.top + rect.height / 2)}px`);
+      card.style.setProperty('--fly-delay', `${index * 90}ms`);
+    });
+    wrap.classList.add('is-flying');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [open, animate]);
+
+  const renderCard = (group) => (
+    <section key={group.id} aria-labelledby={`skill-${group.id}`}>
+      <h3 id={`skill-${group.id}`}>{group.title}</h3>
+      <ul>
+        {group.items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </section>
+  );
+
   return (
     <section className="section" id="skills" aria-labelledby="skills-heading">
       <Reveal>
-        <p className="chapter-index">Toolbox / 06</p>
+        <p className="chapter-index">Toolbox</p>
         <h2 id="skills-heading">
           What I use <em className="accent-phrase">in the work</em>
         </h2>
@@ -478,17 +535,28 @@ export function Skills() {
           Labels, not ratings. Technical fluency means I can specify and prototype with these tools. I am not claiming to
           be a specialist engineer.
         </p>
-        <div className="skill-grid">
-          {skillGroups.map((group) => (
-            <section key={group.id} aria-labelledby={`skill-${group.id}`}>
-              <h3 id={`skill-${group.id}`}>{group.title}</h3>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          ))}
+        <div ref={wrapRef} className={open ? 'toolbox is-open' : 'toolbox'}>
+          {open ? (
+            <div id="toolbox-above" className="skill-grid toolbox-row toolbox-row--above">
+              {above.map(renderCard)}
+            </div>
+          ) : null}
+          <button
+            ref={boxRef}
+            type="button"
+            className="toolbox-button"
+            onClick={openBox}
+            aria-expanded={open}
+            aria-controls="toolbox-above toolbox-below"
+          >
+            <ToolboxIcon />
+            <span className="toolbox-label">{open ? 'Toolbox' : 'Open the toolbox'}</span>
+          </button>
+          {open ? (
+            <div id="toolbox-below" className="skill-grid toolbox-row toolbox-row--below">
+              {below.map(renderCard)}
+            </div>
+          ) : null}
         </div>
       </Reveal>
       <Hairline />
@@ -500,7 +568,7 @@ export function Education() {
   return (
     <section className="section" id="education" aria-labelledby="education-heading">
       <Reveal>
-        <p className="chapter-index">Credentials / 07</p>
+        <p className="chapter-index">Credentials</p>
         <h2 id="education-heading">
           Study <em className="accent-phrase">and certifications</em>
         </h2>
@@ -537,7 +605,7 @@ export function Contact() {
     <section className="section" id="contact" aria-labelledby="contact-heading">
       <Reveal>
         <div className="contact-panel">
-          <p className="chapter-index">Contact / 08</p>
+          <p className="chapter-index">Contact</p>
           <h2 id="contact-heading">
             Start with the work, <em className="accent-phrase">then write to me</em>
           </h2>
