@@ -1,34 +1,22 @@
+import { useEffect } from 'react';
 import { pageMeta } from '../content/site';
-import { PageMeta, SiteFooter, SiteHeader } from '../components/portfolio/Chrome';
-import {
-  AltaDxChapter,
-  Approach,
-  Contact,
-  EarlierRoles,
-  Education,
-  FounderChapter,
-  Hero,
-  OtherProjects,
-  Skills,
-} from '../components/portfolio/HomeSections';
+import { PageMeta } from '../components/portfolio/Chrome';
+import { Hero } from '../components/portfolio/HomeSections';
 
 export default function HomePage() {
+  /* The home page is the hero and nothing else: lock scrolling to it. */
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('home-locked');
+    return () => root.classList.remove('home-locked');
+  }, []);
+
   return (
     <>
       <PageMeta title={pageMeta.title} description={pageMeta.description} />
-      <SiteHeader />
-      <main id="main">
+      <main id="main" className="home">
         <Hero />
-        <AltaDxChapter />
-        <FounderChapter />
-        <OtherProjects />
-        <EarlierRoles />
-        <Approach />
-        <Skills />
-        <Education />
-        <Contact />
       </main>
-      <SiteFooter />
     </>
   );
 }

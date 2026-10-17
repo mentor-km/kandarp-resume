@@ -4,6 +4,9 @@ import Backdrop from './components/portfolio/Backdrop';
 import Intro, { shouldPlayIntro } from './components/portfolio/Intro';
 import CaseStudyPage from './pages/CaseStudyPage';
 import HomePage from './pages/HomePage';
+import WorkPage from './pages/WorkPage';
+import BuildPage from './pages/BuildPage';
+import SleepPage from './pages/SleepPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function Routes() {
@@ -12,6 +15,9 @@ function Routes() {
 
   if (studyMatch) return <CaseStudyPage slug={studyMatch[1]} />;
   if (path === '/') return <HomePage />;
+  if (path === '/9-5') return <WorkPage />;
+  if (path === '/5-11') return <BuildPage />;
+  if (path === '/11-6') return <SleepPage />;
   return <NotFoundPage />;
 }
 

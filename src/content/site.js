@@ -17,6 +17,45 @@ export const profile = {
     'I connect discovery, agent behaviour, requirements, prototypes, and cross-functional delivery.',
 };
 
+/**
+ * Rotating subtext under the hero name. The lines cycle one at a time.
+ * Keep them short and in the same rhythm. Edit freely.
+ */
+export const heroTaglines = [
+  'Turning problems into products, one commit at a time.',
+  'Writing the spec clearly enough to build.',
+  'Shipping the version that teaches me the next one.',
+  'Measuring what shipped, not what I hoped for.',
+];
+
+/**
+ * The three worlds the hero links to, framed as hours of the day.
+ * Each `href` is a route handled in App.jsx.
+ */
+export const heroWorlds = [
+  {
+    id: 'nine-five',
+    clock: '9 to 5',
+    title: 'The day job',
+    blurb: 'Every role I have held, newest first.',
+    href: '/9-5',
+  },
+  {
+    id: 'five-eleven',
+    clock: '5 to 11',
+    title: 'After hours',
+    blurb: 'Founder, mentor, and the products I build on my own.',
+    href: '/5-11',
+  },
+  {
+    id: 'eleven-six',
+    clock: '11 to 6',
+    title: 'Lights out',
+    blurb: 'Nothing to see here. That is the point.',
+    href: '/11-6',
+  },
+];
+
 export const pageMeta = {
   title: 'Kandarp Mathur | AI Product Manager',
   description:

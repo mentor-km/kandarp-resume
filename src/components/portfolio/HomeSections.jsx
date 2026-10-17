@@ -8,6 +8,8 @@ import {
   experience,
   founderInitiative,
   getPublicMetrics,
+  heroTaglines,
+  heroWorlds,
   processSteps,
   profile,
   skillGroups,
@@ -164,24 +166,69 @@ function Hairline() {
   return <hr className="hairline" aria-hidden="true" />;
 }
 
+/**
+ * Cycles through heroTaglines one line at a time, cross-fading between them.
+ * Reduced motion shows the first line only.
+ */
+function RotatingSubtext({ lines }) {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (!lines || lines.length < 2 || reducedMotion()) return undefined;
+    const HOLD = 3200; // how long a line stays fully shown
+    const FADE = 440; // fade-out before the swap
+    let swap;
+    const hold = window.setInterval(() => {
+      setVisible(false);
+      swap = window.setTimeout(() => {
+        setIndex((i) => (i + 1) % lines.length);
+        setVisible(true);
+      }, FADE);
+    }, HOLD);
+    return () => {
+      window.clearInterval(hold);
+      window.clearTimeout(swap);
+    };
+  }, [lines]);
+
+  if (!lines || lines.length === 0) return null;
+
+  return (
+    <p className="hero-rotator" aria-live="polite">
+      <span className={`hero-rotator-line${visible ? ' is-in' : ''}`}>{lines[index]}</span>
+    </p>
+  );
+}
+
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-heading">
       <div className="hero-copy hero-reveal">
-        <p className="hero-hello">
-          Hey, I&apos;m
-        </p>
+        <p className="hero-hello">Hey, I&apos;m</p>
         <h1 id="hero-heading" className="hero-name">
           {profile.name}
         </h1>
         <p className="hero-role">{profile.role}</p>
-        <p className="hero-headline">
-          <em className="accent-phrase">I turn complex business problems</em> into useful AI products, from discovery and
-          product definition to prototypes, delivery, and continuous improvement.
-        </p>
-        <div className="hero-actions">
-          <ResumeButton className="button" />
-        </div>
+        <RotatingSubtext lines={heroTaglines} />
+        <nav className="hero-worlds" aria-label="Three worlds">
+          <ol>
+            {heroWorlds.map((world) => (
+              <li key={world.id}>
+                <AppLink className="hero-world" to={world.href}>
+                  <span className="hero-world-clock">{world.clock}</span>
+                  <span className="hero-world-body">
+                    <span className="hero-world-title">{world.title}</span>
+                    <span className="hero-world-blurb">{world.blurb}</span>
+                  </span>
+                  <span className="hero-world-arrow" aria-hidden="true">
+                    &rarr;
+                  </span>
+                </AppLink>
+              </li>
+            ))}
+          </ol>
+        </nav>
       </div>
     </section>
   );
