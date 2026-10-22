@@ -10,7 +10,7 @@ export const siteUrl = '';
 export const profile = {
   name: 'Kandarp Mathur',
   location: 'Ahmedabad, India',
-  role: 'AI Product Manager | Agentic AI | Product Strategy & Delivery',
+  role: 'AI Product Manager and Startup Founder',
   valueProposition:
     'I turn complex business problems into useful AI products, from discovery and product definition to prototypes, delivery, and continuous improvement.',
   supporting:
@@ -63,11 +63,11 @@ export const pageMeta = {
 };
 
 export const navigation = [
-  { id: 'altadx', label: 'AltaDX', href: '/#altadx' },
-  { id: 'founder', label: 'Founder', href: '/#founder' },
-  { id: 'projects', label: 'Products', href: '/#projects' },
-  { id: 'experience', label: 'Experience', href: '/#experience' },
-  { id: 'skills', label: 'Skills', href: '/#skills' },
+  { id: 'hero', label: 'About', href: '/#hero' },
+  { id: 'agents', label: 'OMAP', href: '/#agents' },
+  { id: 'founder', label: 'Round1', href: '/#founder' },
+  { id: 'builds', label: 'Products', href: '/#builds' },
+  { id: 'credentials', label: 'Credentials', href: '/#credentials' },
   { id: 'contact', label: 'Contact', href: '/#contact' },
 ];
 
@@ -76,6 +76,8 @@ export const contact = {
   mailto: 'mailto:mathurkandarp@gmail.com',
   linkedin: 'https://www.linkedin.com/in/kandarpmathur14/',
   linkedinLabel: 'linkedin.com/in/kandarpmathur14',
+  github: 'https://github.com/mentor-km',
+  githubLabel: 'github.com/mentor-km',
   location: 'Ahmedabad, India',
 };
 
@@ -84,6 +86,32 @@ export const resumeAsset = {
   filename: 'Kandarp_Mathur_Resume.pdf',
   publicPath: '/Kandarp_Mathur_Resume.pdf',
 };
+
+export const coverLetterAsset = {
+  filename: 'Kandarp_Mathur_Cover_Letter.pdf',
+  publicPath: '/Kandarp_Mathur_Cover_Letter.pdf',
+};
+
+export const portraitAsset = {
+  publicPath: '/portrait.jpg',
+  alt: 'Kandarp Mathur',
+};
+
+/** Agents named on the public resume. No per-agent commercial figures. */
+export const omapAgents = [
+  { id: 'concierge', name: 'Concierge', status: 'In delivery', note: 'The first agent. The rest of the suite grew from this one.' },
+  { id: 'playbook', name: 'Playbook', status: 'In delivery' },
+  { id: 'collections', name: 'Collections', status: 'In delivery' },
+  { id: 'sales', name: 'Sales', status: 'In delivery' },
+  { id: 'receptionist', name: 'Receptionist', status: 'In delivery' },
+  { id: 'member-audit', name: 'Member Audit', status: 'In delivery' },
+  { id: 'click2save', name: 'Click2Save', status: 'In delivery' },
+  { id: 'no-show', name: 'No-Show', status: 'In delivery' },
+  { id: 'chargeback', name: 'Chargeback', status: 'In delivery' },
+  { id: 'feedback', name: 'Feedback', status: 'In delivery' },
+  { id: 'yield', name: 'Yield', status: 'In delivery' },
+  { id: 'byoa', name: 'BYOA', status: 'In progress', note: 'Build Your Own Agent. I am still defining this one.' },
+];
 
 export const metrics = [
   {
@@ -383,6 +411,7 @@ export const education = [
 ];
 
 export const certifications = [
+  'AWS Certified AI Business Strategist',
   'Certified ScrumMaster (CSM®)',
   'SAFe® 6 Product Owner / Product Manager',
   'Salesforce Certified AI Associate',

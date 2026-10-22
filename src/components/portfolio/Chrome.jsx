@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { contact, navigation, profile, resumeAsset } from '../../content/site';
+import { contact, coverLetterAsset, navigation, profile, resumeAsset } from '../../content/site';
 import { AppLink, useRoute } from '../../hooks/useRoute';
 
 export function PageMeta({ title, description }) {
@@ -31,6 +31,20 @@ export function ResumeButton({ className = 'button button--ghost' }) {
     <a className={className} href={resumeAsset.publicPath} download={resumeAsset.filename}>
       Download resume
     </a>
+  );
+}
+
+/** Resume and cover letter, the two files served from public/. */
+export function DocumentLinks({ className = 'doc-links' }) {
+  return (
+    <div className={className}>
+      <a className="button" href={resumeAsset.publicPath} download={resumeAsset.filename}>
+        Download resume
+      </a>
+      <a className="button button--ghost" href={coverLetterAsset.publicPath} download={coverLetterAsset.filename}>
+        Download cover letter
+      </a>
+    </div>
   );
 }
 
@@ -154,10 +168,17 @@ export function SiteFooter() {
             <ExternalLink href={contact.linkedin}>LinkedIn</ExternalLink>
           </li>
           <li>
-            <AppLink to="/#skills">Skills</AppLink>
+            <ExternalLink href={contact.github}>GitHub</ExternalLink>
           </li>
           <li>
-            <AppLink to="/#education">Education</AppLink>
+            <a href={resumeAsset.publicPath} download={resumeAsset.filename}>
+              Resume
+            </a>
+          </li>
+          <li>
+            <a href={coverLetterAsset.publicPath} download={coverLetterAsset.filename}>
+              Cover letter
+            </a>
           </li>
         </ul>
       </div>
