@@ -1,22 +1,20 @@
 import { useEffect } from 'react';
 import { pageMeta } from '../content/site';
-import { PageMeta, SiteFooter, SiteHeader } from '../components/portfolio/Chrome';
-import StudioHome from '../components/portfolio/StudioHome';
+import { PageMeta } from '../components/portfolio/Chrome';
+import Opening from '../components/portfolio/Opening';
 
 export default function HomePage() {
   useEffect(() => {
-    document.documentElement.classList.add('studio-page');
-    return () => document.documentElement.classList.remove('studio-page');
+    document.documentElement.classList.add('exp-root');
+    return () => document.documentElement.classList.remove('exp-root');
   }, []);
 
   return (
     <>
       <PageMeta title={pageMeta.title} description={pageMeta.description} />
-      <SiteHeader />
-      <main id="main" className="studio">
-        <StudioHome />
+      <main id="main">
+        <Opening />
       </main>
-      <SiteFooter />
     </>
   );
 }
