@@ -5,8 +5,8 @@ import Opening from '../components/portfolio/Opening';
 
 export default function HomePage() {
   useEffect(() => {
-    document.documentElement.classList.add('exp-root');
-    return () => document.documentElement.classList.remove('exp-root');
+    document.documentElement.classList.add('exp-root', 'exp-home');
+    return () => document.documentElement.classList.remove('exp-root', 'exp-home');
   }, []);
 
   return (

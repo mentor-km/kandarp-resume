@@ -1,333 +1,307 @@
 import { useEffect, useRef, useState } from 'react';
 import { AppLink } from '../../hooks/useRoute';
 
-/* ------------------------------------------------------------------ */
-/* Opening sequence. Edit the lines and timings here.                 */
-/* ------------------------------------------------------------------ */
-export const SEQUENCE = {
-  blankMs: 450,
-  letterMs: 85,
-  holdMeetMs: 420,
-  scrambleMs: 1700,
-  holdRoleMs: 780,
-  clearMs: 460,
-  holdFounderMs: 520,
-  wordMs: 130,
-  meet: 'Meet Kandarp',
-  role: 'AI Product Manager',
-  founder: 'Founder and Mentor',
-  summary:
-    'I build AI products people can actually run. At AltaDX I turned OMAP from one Concierge agent into a suite of 11 agents across 4 pods. I founded Round1, where one client completed 153 interviews, and I mentor career moves at Analystbychance.',
-};
+const STEPS = [
+  { text: 'Hello', speed: 65, hold: 700 },
+  { text: 'I am Kandarp', speed: 65, hold: 700 },
+  { text: 'AI Product Manager - Builder & Founder', speed: 40, hold: 900 },
+];
 
-const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function Drift() {
+  const canvasRef = useRef(null);
 
-let seenThisVisit = false;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
+    const ctx = canvas.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let raf = 0;
+    let width = 0;
+    let height = 0;
+    const stars = Array.from({ length: 110 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      depth: Math.random(),
+      phase: Math.random() * Math.PI * 2,
+    }));
+    const planets = [
+      { x: 0.08, y: 0.16, radius: 18, color: '186, 206, 228', vx: 0.01, vy: 0.004 },
+      { x: 0.9, y: 0.82, radius: 34, color: '214, 186, 140', ring: true, vx: -0.008, vy: -0.003 },
+      { x: 0.93, y: 0.22, radius: 12, color: '150, 186, 168', vx: -0.006, vy: 0.005 },
+    ];
+    const rocks = Array.from({ length: 8 }, (_, index) => ({
+      x: Math.random(),
+      edge: index < 4 ? 'top' : 'bottom',
+      y: index < 4 ? 0.04 + Math.random() * 0.08 : 0.88 + Math.random() * 0.08,
+      size: 2 + Math.random() * 2.4,
+      speed: 0.012 + Math.random() * 0.012,
+      spin: (Math.random() - 0.5) * 0.0004,
+      rotation: Math.random() * Math.PI,
+    }));
 
-function countLetters(text) {
-  return [...text].filter((ch) => ch !== ' ').length;
-}
-
-function wordsOf(text) {
-  return text.split(/\s+/).filter(Boolean);
-}
-
-function marks() {
-  const meetN = countLetters(SEQUENCE.meet);
-  const founderN = countLetters(SEQUENCE.founder);
-  const words = wordsOf(SEQUENCE.summary);
-  let cursor = 0;
-  const at = (ms) => {
-    cursor += ms;
-    return cursor;
-  };
-  return {
-    meetN,
-    founderN,
-    words,
-    blankEnd: at(SEQUENCE.blankMs),
-    meetEnd: at(meetN * SEQUENCE.letterMs),
-    holdMeetEnd: at(SEQUENCE.holdMeetMs),
-    scrambleEnd: at(SEQUENCE.scrambleMs),
-    holdRoleEnd: at(SEQUENCE.holdRoleMs),
-    clearEnd: at(SEQUENCE.clearMs),
-    founderEnd: at(founderN * SEQUENCE.letterMs),
-    holdFounderEnd: at(SEQUENCE.holdFounderMs),
-    summaryEnd: at(words.length * SEQUENCE.wordMs),
-  };
-}
-
-function typedSlots(text, count, idPrefix) {
-  let seen = 0;
-  const slots = [];
-  for (let i = 0; i < text.length; i += 1) {
-    const ch = text[i];
-    if (ch === ' ') {
-      if (seen > 0 && seen <= count) slots.push({ id: `${idPrefix}-${i}`, ch: ' ', kind: 'gap' });
-      continue;
-    }
-    seen += 1;
-    if (seen <= count) slots.push({ id: `${idPrefix}-${i}`, ch, kind: 'type' });
-  }
-  return slots;
-}
-
-function lockedSlots(text, idPrefix, kind) {
-  return [...text].map((ch, i) => ({
-    id: `${idPrefix}-${i}`,
-    ch,
-    kind: ch === ' ' ? 'gap' : kind,
-    tone: kind === 'lock' ? 'citron' : undefined,
-  }));
-}
-
-function scrambleSlots(elapsed) {
-  const from = SEQUENCE.meet;
-  const to = SEQUENCE.role;
-  const progress = Math.min(1, Math.max(0, elapsed / SEQUENCE.scrambleMs));
-  const step = Math.floor(elapsed / 55);
-  const slots = [];
-  for (let i = 0; i < to.length; i += 1) {
-    const ch = to[i];
-    const lockAt = (i + 1) / to.length;
-    if (ch === ' ') {
-      if (progress > 0.04) slots.push({ id: `role-${i}`, ch: ' ', kind: 'gap' });
-      continue;
-    }
-    const extra = i >= from.length;
-    const appearAt = extra ? ((i - from.length + 1) / Math.max(1, to.length - from.length)) * 0.3 : 0;
-    if (progress < appearAt) continue;
-    if (progress >= lockAt) {
-      slots.push({ id: `role-${i}`, ch, kind: 'lock', tone: 'citron' });
-    } else {
-      const glyph = GLYPHS[(step * 7 + i * 11) % GLYPHS.length];
-      slots.push({ id: `role-${i}`, ch: glyph, kind: 'spin' });
-    }
-  }
-  return slots;
-}
-
-export function settledFrame() {
-  const m = marks();
-  return {
-    phase: 'done',
-    slots: typedSlots(SEQUENCE.founder, m.founderN, 'founder'),
-    wordsShown: m.words.length,
-    showActions: true,
-    caret: false,
-    announce: `${SEQUENCE.founder}. ${SEQUENCE.summary}`,
-  };
-}
-
-export function frameAt(elapsed) {
-  const m = marks();
-  if (elapsed < m.blankEnd) {
-    return { phase: 'blank', slots: [], wordsShown: 0, showActions: false, caret: false, announce: '' };
-  }
-  if (elapsed < m.meetEnd) {
-    const n = Math.min(m.meetN, Math.floor((elapsed - m.blankEnd) / SEQUENCE.letterMs) + 1);
-    return {
-      phase: 'meet',
-      slots: typedSlots(SEQUENCE.meet, n, 'meet'),
-      wordsShown: 0,
-      showActions: false,
-      caret: true,
-      announce: SEQUENCE.meet,
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.max(1, width * dpr);
+      canvas.height = Math.max(1, height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
-  }
-  if (elapsed < m.holdMeetEnd) {
-    return {
-      phase: 'meet',
-      slots: typedSlots(SEQUENCE.meet, m.meetN, 'meet'),
-      wordsShown: 0,
-      showActions: false,
-      caret: false,
-      announce: SEQUENCE.meet,
+
+    const sphere = (x, y, radius, color) => {
+      const shade = ctx.createRadialGradient(x - radius * 0.38, y - radius * 0.42, radius * 0.08, x + radius * 0.2, y + radius * 0.16, radius);
+      shade.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+      shade.addColorStop(0.22, `rgba(${color}, 1)`);
+      shade.addColorStop(0.72, `rgba(${color}, 0.78)`);
+      shade.addColorStop(1, 'rgba(12, 14, 18, 0.15)');
+      ctx.fillStyle = shade;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
     };
-  }
-  if (elapsed < m.scrambleEnd) {
-    return {
-      phase: 'scramble',
-      slots: scrambleSlots(elapsed - m.holdMeetEnd),
-      wordsShown: 0,
-      showActions: false,
-      caret: false,
-      announce: SEQUENCE.role,
+
+    const streak = (x, y, length, rise) => {
+      const trail = ctx.createLinearGradient(x, y, x - length, y - rise);
+      trail.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+      trail.addColorStop(0.25, 'rgba(210, 226, 255, 0.45)');
+      trail.addColorStop(1, 'rgba(210, 226, 255, 0)');
+      ctx.strokeStyle = trail;
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - length, y - rise);
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      ctx.fill();
     };
-  }
-  if (elapsed < m.holdRoleEnd) {
-    return {
-      phase: 'role',
-      slots: lockedSlots(SEQUENCE.role, 'role', 'lock'),
-      wordsShown: 0,
-      showActions: false,
-      caret: false,
-      announce: SEQUENCE.role,
+
+    const draw = (time) => {
+      if (!width || !height) resize();
+      const t = reduce ? 8000 : time;
+      ctx.clearRect(0, 0, width, height);
+      const clearLeft = width * 0.18;
+      const clearRight = width * 0.82;
+      const clearTop = height * 0.18;
+      const clearBottom = height * 0.84;
+
+      stars.forEach((star) => {
+        const radius = 0.35 + star.depth * 1.45;
+        const flicker = 0.35 + Math.sin(t * 0.0012 * (0.4 + star.depth) + star.phase) * 0.22;
+        const drift = reduce ? 0 : t * (0.002 + star.depth * 0.004);
+        const x = ((star.x * width + drift) % width + width) % width;
+        const y = star.y * height;
+        const overCopy = x > clearLeft && x < clearRight && y > clearTop && y < clearBottom;
+        const alpha = (0.35 + flicker * star.depth) * (overCopy ? 0.28 : 1);
+        if (!overCopy && star.depth > 0.72) {
+          const glow = ctx.createRadialGradient(x, y, 0, x, y, radius * 6);
+          glow.addColorStop(0, `rgba(244, 247, 255, ${flicker * 0.65})`);
+          glow.addColorStop(1, 'rgba(244, 247, 255, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(x, y, radius * 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = '#f7f8fc';
+        ctx.beginPath();
+        ctx.arc(x, y, overCopy ? radius * 0.7 : radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      });
+
+      if (!reduce) {
+        const shot = t % 5600;
+        if (shot < 720) {
+          const progress = shot / 720;
+          const fromTop = Math.floor(t / 5600) % 2 === 0;
+          const y = fromTop ? height * 0.07 + progress * height * 0.05 : height * 0.93 - progress * height * 0.03;
+          streak(-30 + progress * (width + 90), y, 110, fromTop ? 16 : -10);
+        }
+        const comet = (t % 12000) / 12000;
+        const cometX = -70 + comet * (width + 180);
+        const cometY = height * (Math.floor(t / 12000) % 2 === 0 ? 0.05 : 0.95);
+        streak(cometX, cometY, 150, 8);
+        sphere(cometX, cometY, 3.2, '226, 236, 248');
+      }
+
+      planets.forEach((planet) => {
+        const x = ((planet.x * width + t * planet.vx) % (width + 120) + (width + 120)) % (width + 120) - 60;
+        let y = planet.y * height + Math.sin(t * 0.00015 + planet.x * 6) * 16;
+        if (y > clearTop && y < clearBottom) y = planet.y < 0.5 ? clearTop - planet.radius - 8 : clearBottom + planet.radius + 8;
+        if (planet.ring) {
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(-0.5);
+          ctx.strokeStyle = 'rgba(236, 240, 246, 0.75)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, planet.radius * 1.8, planet.radius * 0.46, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        sphere(x, y, planet.radius, planet.color);
+      });
+
+      rocks.forEach((rock) => {
+        const x = ((rock.x * width + t * rock.speed) % (width + 20) + (width + 20)) % (width + 20) - 10;
+        const y = rock.y * height;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rock.rotation + t * rock.spin);
+        ctx.fillStyle = 'rgba(206, 214, 224, 0.7)';
+        ctx.beginPath();
+        ctx.moveTo(rock.size, 0);
+        ctx.lineTo(-rock.size * 0.4, rock.size * 0.7);
+        ctx.lineTo(-rock.size * 0.8, -rock.size * 0.3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      });
+
+      if (!reduce) raf = requestAnimationFrame(draw);
     };
-  }
-  if (elapsed < m.clearEnd) {
-    return {
-      phase: 'clear',
-      slots: lockedSlots(SEQUENCE.role, 'role', 'out'),
-      wordsShown: 0,
-      showActions: false,
-      caret: false,
-      announce: SEQUENCE.role,
+
+    resize();
+    draw(0);
+    window.addEventListener('resize', resize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
     };
-  }
-  if (elapsed < m.founderEnd) {
-    const n = Math.min(m.founderN, Math.floor((elapsed - m.clearEnd) / SEQUENCE.letterMs) + 1);
-    return {
-      phase: 'founder',
-      slots: typedSlots(SEQUENCE.founder, n, 'founder'),
-      wordsShown: 0,
-      showActions: false,
-      caret: true,
-      announce: SEQUENCE.founder,
-    };
-  }
-  if (elapsed < m.holdFounderEnd) {
-    return {
-      phase: 'founder',
-      slots: typedSlots(SEQUENCE.founder, m.founderN, 'founder'),
-      wordsShown: 0,
-      showActions: false,
-      caret: false,
-      announce: SEQUENCE.founder,
-    };
-  }
-  const shown = Math.min(m.words.length, Math.floor((elapsed - m.holdFounderEnd) / SEQUENCE.wordMs) + 1);
-  if (shown >= m.words.length) return settledFrame();
-  return {
-    phase: 'summary',
-    slots: typedSlots(SEQUENCE.founder, m.founderN, 'founder'),
-    wordsShown: shown,
-    showActions: false,
-    caret: false,
-    announce: `${SEQUENCE.founder}. ${SEQUENCE.summary}`,
-  };
+  }, []);
+
+  return (
+    <div className="imagined-drift" aria-hidden="true">
+      <canvas ref={canvasRef} className="imagined-particles" />
+    </div>
+  );
 }
 
-function shouldPlayOpening() {
-  if (typeof window === 'undefined') return false;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
-  return !seenThisVisit;
+function Arrow() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
 }
 
 export default function Opening() {
-  const playOnMount = useRef(shouldPlayOpening());
-  const [playing, setPlaying] = useState(playOnMount.current);
-  const [frame, setFrame] = useState(() => (playOnMount.current ? frameAt(0) : settledFrame()));
-  const playingRef = useRef(playing);
-  playingRef.current = playing;
+  const [text, setText] = useState('');
+  const [fading, setFading] = useState(false);
+  const [shown, setShown] = useState(false);
+  const stopRef = useRef(false);
 
   useEffect(() => {
-    if (!playing) {
-      seenThisVisit = true;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      setShown(true);
+      setText('');
       return undefined;
     }
-    let raf = 0;
-    let stopped = false;
-    const start = performance.now();
-    let lastPaint = 0;
-    let lastPhase = '';
 
-    const loop = (now) => {
-      if (stopped) return;
-      const elapsed = now - start;
-      const next = frameAt(elapsed);
-      if (next.phase === 'done' || next.phase !== lastPhase || elapsed - lastPaint > 50) {
-        lastPaint = elapsed;
-        lastPhase = next.phase;
-        setFrame(next);
+    stopRef.current = false;
+    const timers = [];
+    const sleep = (ms) =>
+      new Promise((resolve) => {
+        const id = setTimeout(resolve, ms);
+        timers.push(id);
+      });
+
+    async function play() {
+      setShown(false);
+      setFading(false);
+      setText('');
+      for (const step of STEPS) {
+        if (stopRef.current) return;
+        setFading(false);
+        for (let i = 1; i <= step.text.length; i += 1) {
+          if (stopRef.current) return;
+          setText(step.text.slice(0, i));
+          await sleep(step.speed);
+        }
+        if (stopRef.current) return;
+        await sleep(step.hold);
+        if (stopRef.current) return;
+        setFading(true);
+        await sleep(450);
       }
-      if (next.phase === 'done') {
-        seenThisVisit = true;
-        setPlaying(false);
-        return;
-      }
-      raf = requestAnimationFrame(loop);
-    };
+      if (!stopRef.current) setShown(true);
+    }
 
-    raf = requestAnimationFrame(loop);
+    play();
     return () => {
-      stopped = true;
-      cancelAnimationFrame(raf);
+      stopRef.current = true;
+      timers.forEach((id) => clearTimeout(id));
     };
-  }, [playing]);
-
-  useEffect(() => {
-    if (!playing) return undefined;
-    const skip = () => {
-      if (!playingRef.current) return;
-      seenThisVisit = true;
-      setFrame(settledFrame());
-      setPlaying(false);
-    };
-    const onKey = (event) => {
-      if (event.key === 'Escape') skip();
-    };
-    window.addEventListener('keydown', onKey);
-    window.addEventListener('wheel', skip, { passive: true });
-    window.addEventListener('touchmove', skip, { passive: true });
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('wheel', skip);
-      window.removeEventListener('touchmove', skip);
-    };
-  }, [playing]);
-
-  const words = wordsOf(SEQUENCE.summary).slice(0, frame.wordsShown);
-  const skip = () => {
-    if (!playingRef.current) return;
-    seenThisVisit = true;
-    setFrame(settledFrame());
-    setPlaying(false);
-  };
+  }, []);
 
   return (
-    <div className={playing ? 'opening is-playing' : 'opening'} onClick={playing ? skip : undefined}>
-      <p className="sr-only" aria-live="polite">
-        {frame.announce}
-      </p>
-      {playing ? (
-        <button type="button" className="opening-skip" onClick={skip}>
-          Skip
-        </button>
-      ) : null}
-      <div className="opening-stage">
-        <h1 className="opening-line" aria-hidden={frame.showActions ? undefined : true}>
-          {frame.slots.map((slot, index) => (
-            <span
-              key={slot.id}
-              className={`exp-slot is-${slot.kind}${slot.tone === 'citron' ? ' is-citron' : ''}`}
-              style={slot.kind === 'out' ? { animationDelay: `${index * 14}ms` } : undefined}
-            >
-              {slot.ch === ' ' ? '\u00a0' : slot.ch}
-            </span>
-          ))}
-          {frame.caret ? <span className="opening-caret" /> : null}
-        </h1>
-        {frame.wordsShown > 0 ? (
-          <p className={playOnMount.current ? 'opening-summary' : 'opening-summary is-settled'}>
-            {words.map((word, index) => (
-              <span key={`${word}-${index}`}>
-                <span className="opening-word">{word}</span>
-                {index < words.length - 1 ? ' ' : ''}
-              </span>
-            ))}
+    <div className="imagined">
+      <Drift />
+      <div className="imagined-glow" aria-hidden="true" />
+      <div className="imagined-grid" aria-hidden="true" />
+      <div className="imagined-veil" aria-hidden="true" />
+
+      <div className={shown ? 'imagined-intro is-hidden' : 'imagined-intro'}>
+        <div className={fading ? 'imagined-type is-out' : 'imagined-type'}>
+          <span className="imagined-type-text">{text}</span>
+          <span className="imagined-cursor" aria-hidden="true" />
+        </div>
+        <p className="sr-only" aria-live="polite">
+          {text}
+        </p>
+      </div>
+
+      <div className={shown ? 'imagined-hero is-visible' : 'imagined-hero'}>
+        <header className="imagined-bar">
+          <div className="imagined-brand">Kandarp Mathur</div>
+          <div className="imagined-tag">Available for high-impact roles</div>
+        </header>
+        <section className="imagined-center">
+          <p className="imagined-kicker">AI Product Manager, founder, and mentor</p>
+          <h1>Here is all I do</h1>
+          <p className="imagined-lede">
+            At AltaDX I own OMAP, a suite of AI agents. I founded Round1, and I help folks get into IT with my platform
+            Analystbychance.
           </p>
-        ) : null}
-        {frame.showActions ? (
-          <div className="opening-actions" onClick={(event) => event.stopPropagation()}>
-            <AppLink className="exp-cta exp-cta--do" to="/do">
-              See what I do?
+          <ul className="imagined-stack">
+            <li>
+              <strong>11+</strong>
+              <span>Agents</span>
+            </li>
+            <li>
+              <strong>4</strong>
+              <span>delivery pods</span>
+            </li>
+            <li>
+              <strong>200+</strong>
+              <span>interviews on Round1</span>
+            </li>
+            <li>
+              <strong>Mentor</strong>
+              <span>Analystbychance</span>
+            </li>
+          </ul>
+          <div className="imagined-actions">
+            <AppLink className="imagined-cta imagined-cta--primary" to="/do">
+              <span>MY DAY JOB</span>
+              <Arrow />
             </AppLink>
-            <AppLink className="exp-cta exp-cta--built" to="/built">
-              Explore what I built?
+            <AppLink className="imagined-cta imagined-cta--secondary" to="/built">
+              <span>Things I built on my own time</span>
+              <Arrow />
             </AppLink>
           </div>
-        ) : null}
+        </section>
+
+        <footer className="imagined-foot">
+          <span>Product owner at AltaDX · Founder of Round1 and Analystbychance</span>
+        </footer>
       </div>
     </div>
   );
