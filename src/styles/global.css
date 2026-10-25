@@ -3025,38 +3025,152 @@ html.exp-home body {
   bottom: 28px;
   left: 48px;
   right: 48px;
+  width: auto;
   justify-content: center;
   color: var(--text-muted);
   font-size: 0.8rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
+  .imagined {
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   .imagined-hero {
-    padding: 7.5rem 20px 4.5rem;
+    height: auto;
+    min-height: 100dvh;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow: visible;
+    padding: 0 1.15rem 1.4rem;
+  }
+
+  .imagined-bar {
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    margin: 0 0 0.35rem;
+    padding: 0.85rem 0 0.55rem;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(16, 18, 22, 0.94), rgba(16, 18, 22, 0));
+  }
+
+  .imagined-brand {
+    font-size: 1rem;
+  }
+
+  .imagined-tag {
+    max-width: 100%;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .imagined-type {
+    display: block;
+    width: calc(100% - 2rem);
+    max-width: 22rem;
+    min-height: 5.5rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .imagined-type-text {
+    font-size: clamp(1.35rem, 7vw, 1.85rem);
+    line-height: 1.25;
+  }
+
+  .imagined-center {
+    flex: 1 0 auto;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.85rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .imagined-kicker,
+  .imagined-lede,
+  .imagined-center h1,
+  .imagined-foot {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .imagined-center h1 {
+    font-size: clamp(1.7rem, 8vw, 2.45rem);
+  }
+
+  .imagined-lede {
+    font-size: 0.98rem;
+  }
+
+  .imagined-stack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .imagined-stack li,
+  .imagined-stack span {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .imagined-stack li {
+    padding: 0.7rem 0.75rem;
+  }
+
+  .imagined-stack strong {
+    font-size: 1.35rem;
   }
 
   .imagined-actions {
     flex-direction: column;
     width: 100%;
+    min-width: 0;
   }
 
   .imagined-cta {
     justify-content: center;
     width: 100%;
-  }
-
-  .imagined-bar {
-    padding: 20px 20px 0;
-    flex-direction: column;
-    text-align: center;
+    max-width: 100%;
+    padding: 0.9rem 1rem;
   }
 
   .imagined-foot {
+    position: static;
+    left: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 0.35rem;
     text-align: center;
   }
 
-}
+  .exp-top-inner {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
 
+  .exp-nav {
+    flex-wrap: wrap;
+  }
+
+  .exp-page h1 {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+  }
+}
 @keyframes imagined-blink {
   0%,
   49% {
