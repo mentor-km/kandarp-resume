@@ -3400,6 +3400,493 @@ html.exp-home body {
   color: var(--exp-accent);
 }
 
+.exp-page--do .exp-wrap,
+.exp-page--do .exp-top-inner {
+  width: min(1080px, calc(100% - 2rem));
+}
+
+.day-hero {
+  padding: 1.4rem 0 0.4rem;
+}
+
+.day-lede {
+  max-width: 44rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.day-lede strong {
+  color: var(--carbon-bright);
+  font-weight: 650;
+}
+
+.day-stats,
+.day-pillars,
+.day-agents,
+.day-wizard,
+.day-guard,
+.day-lead,
+.day-arch,
+.day-kpis {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.day-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin: 1.3rem 0 1.2rem;
+}
+
+.day-stats li,
+.day-card,
+.day-agent,
+.day-study,
+.day-canvas,
+.day-prompt,
+.day-drawer {
+  border: 1px solid rgba(244, 241, 236, 0.12);
+  border-radius: 14px;
+  background: rgba(244, 241, 236, 0.04);
+}
+
+.day-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+}
+
+.day-stats strong {
+  color: var(--carbon-bright);
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.day-stats span,
+.day-copy,
+.day-card p,
+.day-agent span,
+.day-study p,
+.day-canvas dd {
+  color: var(--carbon-light);
+}
+
+.day-cta,
+.day-filters,
+.day-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.day-jump {
+  margin-top: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.day-jump a {
+  color: var(--carbon-light);
+  text-decoration: none;
+}
+
+.day-jump a:hover {
+  color: var(--exp-accent);
+}
+
+.day-section {
+  padding: 2.4rem 0 0.2rem;
+  scroll-margin-top: 4.6rem;
+}
+
+.day-section h2 {
+  margin: 0.3rem 0 0.7rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  letter-spacing: -0.03em;
+  color: var(--carbon-bright);
+}
+
+.day-copy {
+  max-width: 44rem;
+  margin: 0 0 1rem;
+  line-height: 1.55;
+}
+
+.day-pillars,
+.day-wizard,
+.day-guard,
+.day-lead,
+.day-arch {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.day-card,
+.day-study,
+.day-canvas,
+.day-prompt {
+  padding: 1.1rem 1.15rem;
+}
+
+.day-card .day-badge,
+.day-agent .day-badge,
+.day-study .day-badge,
+.day-drawer .day-badge {
+  color: var(--exp-accent-soft);
+}
+
+.day-card .exp-kicker,
+.day-card .day-meta,
+.day-card .day-outcome,
+.day-study .day-study-sub {
+  color: var(--exp-accent);
+}
+  margin: 0.35rem 0 0.45rem;
+  color: var(--carbon-bright);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.day-card p,
+.day-study p,
+.day-agent span,
+.day-canvas dd {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.day-badge,
+.day-meta,
+.day-count,
+.day-status,
+.day-study-sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+
+.day-badge {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0 0 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--exp-accent) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--exp-accent) 14%, transparent);
+  color: var(--exp-accent-soft);
+}
+
+.day-meta,
+.day-count,
+.day-study-sub {
+  color: var(--exp-accent);
+}
+
+.day-card .day-meta,
+.day-study .day-stack,
+.day-prompt .day-meta {
+  margin-top: 0.85rem;
+}
+
+.day-filters {
+  margin: 0 0 1rem;
+}
+
+.day-filter {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(244, 241, 236, 0.16);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--carbon-light);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.day-filter.is-on {
+  border-color: var(--exp-accent);
+  background: var(--exp-accent);
+  color: var(--carbon-dark);
+}
+
+.day-explore,
+.day-byoa {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.day-agents {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.day-agent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.day-agent strong {
+  color: var(--carbon-bright);
+  font-size: 1.05rem;
+}
+
+.day-agent.is-selected {
+  border-color: var(--exp-accent);
+  background: color-mix(in srgb, var(--exp-accent) 10%, transparent);
+}
+
+.day-agent-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.day-agent-top .day-badge {
+  margin: 0;
+}
+
+.day-status {
+  color: var(--carbon-light);
+}
+
+.day-status--live,
+.day-status--custom {
+  color: var(--exp-accent-soft);
+}
+
+.day-study {
+  scroll-margin-top: 4.6rem;
+}
+
+.day-study h4 {
+  margin: 1rem 0 0.4rem;
+  color: var(--carbon-bright);
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.day-problem,
+.day-decision {
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+}
+
+.day-problem {
+  border-left: 3px solid var(--exp-accent);
+  background: color-mix(in srgb, var(--exp-accent) 10%, transparent);
+}
+
+.day-decision {
+  border: 1px solid color-mix(in srgb, var(--exp-accent) 35%, transparent);
+}
+
+.day-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.day-steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  color: var(--carbon-light);
+  line-height: 1.45;
+}
+
+.day-steps li::before {
+  content: counter(step);
+  counter-increment: step;
+  color: var(--exp-accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.day-steps {
+  counter-reset: step;
+}
+
+.day-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.day-kpis li {
+  padding: 0.28rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--exp-accent) 35%, transparent);
+  border-radius: 999px;
+  color: var(--exp-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.day-stack {
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(244, 241, 236, 0.16);
+  font-size: 0.86rem;
+}
+
+.day-outcome {
+  margin-top: 0.8rem;
+  color: var(--exp-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.day-prompt {
+  margin: 0 0 0.8rem;
+}
+
+.day-prompt p:last-child {
+  color: var(--carbon-bright);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.day-canvas dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0.8rem 0 0;
+}
+
+.day-canvas dt {
+  margin-bottom: 0.15rem;
+  color: var(--exp-accent);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.day-drawer {
+  margin-top: 0.9rem;
+  overflow: hidden;
+}
+
+.day-drawer-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border: 0;
+  background: transparent;
+  color: var(--carbon-bright);
+  text-align: left;
+  cursor: pointer;
+}
+
+.day-drawer-toggle strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+}
+
+.day-drawer-toggle span span {
+  color: var(--carbon-light);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.day-arch {
+  padding: 0 1rem 1rem;
+}
+
+.day-arch li {
+  padding: 0.9rem;
+  border: 1px solid rgba(244, 241, 236, 0.1);
+  border-radius: 12px;
+  background: rgba(14, 15, 18, 0.45);
+}
+
+.day-arch h3 {
+  margin: 0.3rem 0 0.35rem;
+  color: var(--carbon-bright);
+  font-size: 1rem;
+}
+
+.day-arch p {
+  margin: 0;
+  color: var(--carbon-light);
+  line-height: 1.45;
+}
+
+@media (min-width: 720px) {
+  .day-stats,
+  .day-agents,
+  .day-guard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .day-pillars,
+  .day-wizard,
+  .day-lead {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .day-explore {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: start;
+  }
+
+  .day-study {
+    position: sticky;
+    top: 4.6rem;
+  }
+
+  .day-byoa {
+    grid-template-columns: 0.95fr 1.05fr;
+    align-items: start;
+  }
+
+  .day-lead,
+  .day-arch {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1080px) {
+  .day-stats,
+  .day-pillars,
+  .day-wizard,
+  .day-arch {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .day-lead {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 @media (min-width: 800px) {
   .exp-grid {
     grid-template-columns: 1fr 1fr;
