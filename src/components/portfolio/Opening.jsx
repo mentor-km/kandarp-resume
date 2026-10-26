@@ -7,6 +7,14 @@ const STEPS = [
   { text: 'AI Product Manager - Builder & Founder', speed: 40, hold: 900 },
 ];
 
+function isHomePath(pathname) {
+  const path = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  return path === '/' || path === '';
+}
+
+const openedOnHome = isHomePath(window.location.pathname);
+let introClaimed = false;
+
 function Drift() {
   const canvasRef = useRef(null);
 
@@ -193,18 +201,20 @@ function Arrow() {
 export default function Opening() {
   const [text, setText] = useState('');
   const [fading, setFading] = useState(false);
-  const [shown, setShown] = useState(false);
+  const [shown, setShown] = useState(() => introClaimed || !openedOnHome);
   const stopRef = useRef(false);
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) {
+    if (reduce || introClaimed || !openedOnHome) {
+      introClaimed = true;
       setShown(true);
       setText('');
       return undefined;
     }
 
     stopRef.current = false;
+    const started = performance.now();
     const timers = [];
     const sleep = (ms) =>
       new Promise((resolve) => {
@@ -230,13 +240,17 @@ export default function Opening() {
         setFading(true);
         await sleep(450);
       }
-      if (!stopRef.current) setShown(true);
+      if (!stopRef.current) {
+        introClaimed = true;
+        setShown(true);
+      }
     }
 
     play();
     return () => {
       stopRef.current = true;
       timers.forEach((id) => clearTimeout(id));
+      if (performance.now() - started > 100) introClaimed = true;
     };
   }, []);
 
