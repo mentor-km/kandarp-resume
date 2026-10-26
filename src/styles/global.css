@@ -3401,12 +3401,163 @@ html.exp-home body {
 }
 
 .exp-page--do .exp-wrap,
-.exp-page--do .exp-top-inner {
+.exp-page--do .exp-top-inner,
+.exp-page--built .exp-wrap,
+.exp-page--built .exp-top-inner {
   width: min(1080px, calc(100% - 2rem));
 }
 
-.day-hero {
-  padding: 1.4rem 0 0.4rem;
+.day-stats .day-badge {
+  margin: 0;
+  color: var(--exp-accent-soft);
+}
+
+.own-stat-top,
+.own-scores,
+.own-skills,
+.own-decisions,
+.own-points,
+.own-certs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.own-title-rest {
+  display: block;
+}
+
+.own-stat-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.own-stat-top .day-badge {
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 720px) {
+  .own-stat-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.own-skills li > span:last-child {
+  flex-shrink: 0;
+}
+
+.own-sub,
+.own-close {
+  margin: 0.55rem 0 0;
+  color: var(--carbon-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.own-close a {
+  color: var(--exp-accent);
+}
+
+.own-flagship {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.own-decisions,
+.own-points {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.own-decisions {
+  margin-top: 1rem;
+}
+
+.own-decisions li {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(244, 241, 236, 0.12);
+}
+
+.own-decisions strong {
+  color: var(--carbon-bright);
+}
+
+.own-points li {
+  color: var(--carbon-light);
+  line-height: 1.45;
+}
+
+.own-scores {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.8rem 0;
+}
+
+.own-scores li {
+  padding: 0.65rem 0.7rem;
+  border: 1px solid rgba(244, 241, 236, 0.12);
+  border-radius: 10px;
+}
+
+.own-scores span,
+.own-skills small,
+.own-certs span {
+  display: block;
+  color: var(--carbon-light);
+  font-size: 0.78rem;
+}
+
+.own-scores strong,
+.own-certs strong,
+.own-skills strong {
+  color: var(--carbon-bright);
+}
+
+.own-skills {
+  display: grid;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.own-skills li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.55rem 0;
+  border-top: 1px solid rgba(244, 241, 236, 0.1);
+}
+
+.own-certs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.day-study h3 .day-study-sub {
+  display: inline;
+  margin-left: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 450;
+}
+
+@media (min-width: 720px) {
+  .own-scores {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .own-flagship {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
 }
 
 .day-lede {
@@ -3551,6 +3702,11 @@ html.exp-home body {
 .day-study .day-study-sub {
   color: var(--exp-accent);
 }
+
+.day-card h3,
+.day-study h3,
+.day-prompt h3,
+.day-canvas h3 {
   margin: 0.35rem 0 0.45rem;
   color: var(--carbon-bright);
   font-family: var(--font-heading);
